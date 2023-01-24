@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "declaration": true,
+        "esModuleInterop": true,
+        "lib": [
+          "es2021"
+        ],
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "outDir": "dist",
+        "strict": true,
+        "target": "ESNext"
+      },
+      "include": [
+        "src/**/*"
+      ],
+      "exclude": [
+        "node_modules",
+        "dist"
+      ],
+      "skipLibCheck": false
+  }
