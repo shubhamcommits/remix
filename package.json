@@ -9,8 +9,8 @@
   "scripts": {
     "build": "tsc",
     "serve": "ts-node-dev server.ts",
-    "start": "NODE_ENV=production & ts-node-dev src/server.ts",
-    "dev": "NODE_ENV=development & ts-node-dev src/server.ts",
+    "start": "NODE_ENV=production & ts-node-dev server.ts",
+    "dev": "NODE_ENV=development & ts-node-dev server.ts",
     "prod": "NODE_ENV=production & node dist/server.js"
   },
   "devDependencies": {
