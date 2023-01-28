@@ -8,10 +8,19 @@ import { RecipeController } from '../controllers'
 const recipeControllers = new RecipeController()
 
 // Export Router
-export const recipeRoutes = Router()
+export const RecipeRoutes = Router()
+
+// POST - Extract Recipe Details
+RecipeRoutes.post('/extract', recipeControllers.extractRawRecipe)
+
+// POST - Parse Recipe
+RecipeRoutes.post('/parse', recipeControllers.parseRecipe)
 
 // Route Definition
-recipeRoutes.route('/')
+RecipeRoutes.route('/')
 
     // Fetch all recipes
     .get(recipeControllers.fetchAllRecipes)
+
+    // Create new recipe
+    .post(recipeControllers.createRecipe)

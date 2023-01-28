@@ -11,7 +11,7 @@ import morgan from 'morgan'
 import compression from 'compression'
 
 // Routes
-import { recipeRoutes } from './routes'
+import { AuthRoutes, RecipeRoutes, RemixRoutes, UserRoutes } from './routes'
 
 // Define the express application
 const app = express()
@@ -44,7 +44,10 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
 })
 
 // Correct REST naming
-app.use('/api/v1/recipes', recipeRoutes)
+app.use('/api/v1/auths', AuthRoutes)
+app.use('/api/v1/recipes', RecipeRoutes)
+app.use('/api/v1/remixes', RemixRoutes)
+app.use('/api/v1/users', UserRoutes)
 
 // Invalid routes handling middleware
 app.all('*', (req: Request, res: Response, next: NextFunction) => {

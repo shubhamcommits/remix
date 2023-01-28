@@ -15,9 +15,13 @@ Recipe.init({
         primaryKey: true,
         allowNull: false
     },
+    recipe_raw: {
+        type: DataTypes.TEXT,
+        defaultValue: ''
+    },
     user_id: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: true
     },
     title: {
         type: DataTypes.STRING,
@@ -35,12 +39,12 @@ Recipe.init({
         allowNull: false
     },
     ingredients: {
-        type: DataTypes.TEXT,
-        defaultValue: '[]'
+        type: DataTypes.JSON,
+        defaultValue: []
     },
     instructions: {
-        type: DataTypes.TEXT,
-        defaultValue: '[]'
+        type: DataTypes.JSON,
+        defaultValue: []
     },
     like_count: {
         type: DataTypes.INTEGER,
@@ -49,7 +53,7 @@ Recipe.init({
     },
     remixes: {
         type: DataTypes.JSON,
-        defaultValue: Sequelize.fn('JSON_ARRAY'),
+        defaultValue: [],
         allowNull: true
     }
 }, { sequelize: db })

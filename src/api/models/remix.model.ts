@@ -15,13 +15,17 @@ Remix.init({
         primaryKey: true,
         allowNull: false
     },
-    ingredients: {
+    remix_raw: {
         type: DataTypes.TEXT,
-        defaultValue: '[]'
+        defaultValue: ''
+    },
+    ingredients: {
+        type: DataTypes.JSON,
+        defaultValue: []
     },
     instructions: {
-        type: DataTypes.TEXT,
-        defaultValue: '[]'
+        type: DataTypes.JSON,
+        defaultValue: []
     },
     remix_type: {
         type: DataTypes.UUID,

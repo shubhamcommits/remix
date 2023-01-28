@@ -5,11 +5,11 @@ import { Model, DataTypes } from 'sequelize'
 import { db } from '../../sequelize'
 
 // Extend Sequelize Model Class
-export class User extends Model {}
+export class User extends Model { }
 
 // Initiliase the Model
 User.init({
-        user_id: {
+    user_id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
