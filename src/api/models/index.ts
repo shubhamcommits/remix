@@ -17,7 +17,12 @@ Recipe.belongsTo(User, {
 })
 
 Recipe.hasMany(Remix, {
-    foreignKey: 'remixes'
+    as: 'children', foreignKey: 'recipe_id'
+})
+
+Remix.belongsTo(Recipe, { 
+    foreignKey: 'recipe_id', 
+    onDelete: 'CASCADE' 
 })
 
 Remix.belongsTo(RemixType, {

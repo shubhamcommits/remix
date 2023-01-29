@@ -35,8 +35,8 @@ export class OpenAI {
                 frequency_penalty: 0,
                 presence_penalty: 0
             })
-                .then((data) => {
-                    resolve(({ data: data }))
+                .then((res) => {
+                    resolve({ data: res.data.choices[0].text })
                 })
                 .catch((error) => {
                     reject({ error: error })
@@ -61,8 +61,8 @@ export class OpenAI {
                 frequency_penalty: 0,
                 presence_penalty: 0
             })
-                .then((data) => {
-                    resolve(({ data: data }))
+                .then((res: any) => {
+                    resolve({ data: res.data.choices[0].text })
                 })
                 .catch((error) => {
                     reject({ error: error })

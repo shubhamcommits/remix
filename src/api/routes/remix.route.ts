@@ -11,37 +11,46 @@ const remixControllers = new RemixController()
 export const RemixRoutes = Router()
 
 // Route Definition
+RemixRoutes.post('/generate', remixControllers.remixRecipe)
+
+// Route Definition
 RemixRoutes.route('/types')
 
-    // Fetch all remix types
+    // Fetch all Remix Types
     .get(remixControllers.fetchAllRemixTypes)
 
-    // Create new remix type
+    // Create new Remix Type
     .post(remixControllers.createRemixType)
 
 // Route Definition
 RemixRoutes.route('/types/:id')
 
-    // Fetch remix type
+    // Fetch Remix Type by ID
     .get(remixControllers.fetchRemixType)
 
-    // Update remix type
+    // Update Remix Type by ID
     .put(remixControllers.updateRemixType)
+
+    // Delete Remix Type by ID
+    .delete(remixControllers.removeRemixType)
 
 // Route Definition
 RemixRoutes.route('/')
 
-    // Fetch all remix recipes
-    .get(remixControllers.fetchAllRemixRecipes)
+    // Fetch all Remixed Recipes
+    .get(remixControllers.fetchAllRemixedRecipes)
 
-    // Create new remix recipe
-    .post(remixControllers.createRemixRecipe)
+    // Create new Remixed Recipe
+    .post(remixControllers.createRemixedRecipe)
 
 // Route Definition
 RemixRoutes.route('/:id')
 
-    // Fetch remixed recipe
+    // Fetch Remixed Recipe by ID
     .get(remixControllers.fetchRemixedRecipe)
 
-    // Update remixed recipe
+    // Update Remixed Recipe by ID
     .put(remixControllers.updateRemixedRecipe)
+
+    // Delete Remixed Recipe by ID
+    .delete(remixControllers.removeRemixedRecipe)

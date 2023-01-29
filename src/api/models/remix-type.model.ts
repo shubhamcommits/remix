@@ -1,5 +1,5 @@
 // Sequelize Module
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes } from 'sequelize'
 
 // Import Database Class
 import { db } from '../../sequelize'
@@ -17,7 +17,6 @@ RemixType.init({
     },
     name: {
         type: DataTypes.STRING,
-        // unique: true,
         defaultValue: 'New Remix Type',
         allowNull: false
     },
@@ -26,4 +25,4 @@ RemixType.init({
         defaultValue: 'New Prompt Type',
         allowNull: false
     }
-}, { sequelize: db })
+}, { sequelize: db, engine: 'InnoDB' })

@@ -25,11 +25,11 @@ export class RecipeService {
                     .then((data: any) => {
 
                         // Create the new Recipe Type
-                        Recipe.create(data)
+                        Recipe.create(data.recipe)
                             .then((recipe) => {
 
                                 // Resolve the Promise
-                                resolve({ data: recipe })
+                                resolve(recipe)
 
                             })
                             .catch((error) => {
@@ -72,6 +72,68 @@ export class RecipeService {
 
                         // Reject the Promise
                         reject([])
+                    })
+
+            } catch (error) {
+                reject({ error: error })
+            }
+        })
+    }
+
+    /**
+     * This function fetches a recipe by ID
+     * @returns 
+     */
+    async fetchRecipe(id: any) {
+        return new Promise(async (resolve, reject) => {
+            try {
+
+                // Fetch the RemixType
+                Recipe.findOne({
+                    where: {
+                        recipe_id: id
+                    }
+                })
+                    .then((res: any) => {
+
+                        // Resolve the Promise
+                        resolve(res)
+                    })
+                    .catch((error: any) => {
+
+                        // Reject the Promise
+                        reject({ message: 'Unable to find the requested the Recipe, please try again with a different ID!', stack: error })
+                    })
+
+            } catch (error) {
+                reject({ error: error })
+            }
+        })
+    }
+
+    /**
+     * This function removes a recipe from the system
+     * @returns 
+     */
+    async removeRecipe(id: any) {
+        return new Promise(async (resolve, reject) => {
+            try {
+
+                // Fetch the list of recipes
+                Recipe.destroy({
+                    where: {
+                        recipe_id: id  
+                    }
+                })
+                    .then((res: any) => {
+
+                        // Resolve the Promise
+                        resolve(res)
+                    })
+                    .catch((error: any) => {
+
+                        // Reject the Promise
+                        reject({ message: 'Unable to remove the requested Recipe, please try again with a different ID!', stack: error })
                     })
 
             } catch (error) {

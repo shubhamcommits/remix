@@ -16,8 +16,9 @@ Recipe.init({
         allowNull: false
     },
     recipe_raw: {
-        type: DataTypes.TEXT,
-        defaultValue: ''
+        type: DataTypes.JSON,
+        defaultValue: '',
+        allowNull: true,
     },
     user_id: {
         type: DataTypes.UUID,
@@ -50,10 +51,5 @@ Recipe.init({
         type: DataTypes.INTEGER,
         defaultValue: 0,
         allowNull: false
-    },
-    remixes: {
-        type: DataTypes.JSON,
-        defaultValue: [],
-        allowNull: true
     }
-}, { sequelize: db })
+}, { sequelize: db, engine: 'InnoDB' })

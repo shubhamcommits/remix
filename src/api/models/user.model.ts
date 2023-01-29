@@ -25,4 +25,4 @@ User.init({
         defaultValue: 'New User Email',
         allowNull: false
     }
-}, { sequelize: db })
+}, { sequelize: db, engine: 'InnoDB' })

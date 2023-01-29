@@ -5,10 +5,13 @@ import axios from 'axios'
 import cheerio from 'cheerio'
 
 // Import Dice's Coefficient String Similarity
-import { compareTwoStrings } from 'string-similarity'
+import { compareTwoStrings, findBestMatch } from 'string-similarity'
 
 // Import NLP Module
 import nlp from 'compromise'
+
+// Import lodash Module
+import lodash from 'lodash'
 
 // Export Service Class
 export class HelperService {
@@ -99,39 +102,204 @@ export class HelperService {
         })
     }
 
+    /**
+     * This function fetches the list of all the best matching properties from a JSON
+     * @param json 
+     * @param matchingProperties 
+     * @returns 
+     */
+    getAllMatchingKeys(json: any, matchingProperties: string[]): string[] {
+
+        // Global List of Keys from a JSON
+        let keys: string[] = []
+
+        // Fetch all the parent/nested Keys and Push into the global array
+        function fetchKeys(obj: any) {
+            for (let key in obj) {
+                keys.push(key)
+                if (typeof obj[key] === "object") {
+                    fetchKeys(obj[key])
+                }
+            }
+        }
+
+        // Call the function
+        fetchKeys(json)
+
+        // Array of best matches from the global keys 
+        let bestMatches: any = []
+
+        // Push the key into the matching property
+        matchingProperties.forEach((prop) => {
+            bestMatches.push(findBestMatch(prop, keys).bestMatch.target || '')
+        })
+
+        // Return the list of best matches
+        return bestMatches
+    }
+
+    /**
+     * This function fetches the key position from a key
+     * @param json 
+     * @param key 
+     * @param path 
+     * @returns 
+     */
+    findKeyPosition(json: any, key: string, path: string[] = []): string[] | null {
+        for (let k in json) {
+            if (k === key) {
+                return path.concat(k)
+            }
+            if (typeof json[k] === "object") {
+                let result = this.findKeyPosition(json[k], key, path.concat(k))
+                if (result !== null) {
+                    return result
+                }
+            }
+        }
+        return null
+    }
+
+    /**
+     * This function fetches the list of all the positions of keys
+     * @param json 
+     * @param keys 
+     * @returns 
+     */
+    findKeyPositions(json: object, keys: string[]) {
+        let result: any = {}
+        keys.forEach((key: any) => {
+            result[key] = this.findKeyPosition(json, key)
+        })
+        return result
+    }
+
+    /**
+     * Check if an object is empty or not
+     * @param obj 
+     * @returns 
+     */
+    checkIfObjectIsEmpty(obj: object) {
+        if (JSON.stringify(obj) == JSON.stringify('{}') || JSON.stringify(obj) == JSON.stringify(undefined) || JSON.stringify(obj) == JSON.stringify(null))
+            return true
+        else
+            return false
+    }
+
+    /**
+     * This function is responsible for fetching the data from an URL and parsing the recipes out from it
+     * @param html 
+     * @returns 
+     */
     parseRecipeAndIngredients(html: any) {
         return new Promise((resolve, reject) => {
+            try {
 
-            // Load the Cheerio
-            const $ = cheerio.load(html)
+                // Load the Cheerio
+                const $ = cheerio.load(html)
 
-            // Fetch the LD-JSON Script
-            const ldJsonScript = $('script[type="application/ld+json"]').html()
+                // Fetch the LD-JSON Script
+                const ldJsonScript = $('script[type="application/ld+json"]').html()
 
-            // Check if LD-JSON Script exist
-            if (ldJsonScript != null || ldJsonScript != undefined) {
+                // Fetch the Title
+                const title = ($('title').text() || $('meta[property="og:title"]').attr('content'))?.trim().replaceAll('\n', '')
 
-                // Parse the JSON
-                let result = JSON.parse(ldJsonScript || '')
+                // Check if LD-JSON Script exist
+                if (ldJsonScript != null || ldJsonScript != undefined) {
 
-                // Resolve the promise
-                resolve({
-                    title: result.name,
-                    user_id: 'e8942adc-bb5d-477f-9a0f-ec4a1e98d838',
-                    original_author: result.author.name,
-                    image: result.image.url,
-                    instructions: result.recipeInstructions,
-                    ingredients: result.recipeIngredient,
-                })
+                    // Possible matching keys which are supposed to be present in the JSON 
+                    const recipeKeys = ['ingredient', 'author', 'image', 'instruction', 'name']
+
+                    // Parse the JSON
+                    let result: any = JSON.parse(ldJsonScript || '')
+
+                    // If @type is not found
+                    if(result['@type'] == undefined){
+
+                        // Find Recipe Object
+                        let recipeIndex = result['@graph'].findIndex((item: any)=> item['@type'] == 'Recipe')
+                        if(recipeIndex != -1)
+                            result = result['@graph'][recipeIndex]
+
+                        // let personIndex = result['@graph'].findIndex((item: any)=> item['@type'] == 'Person')
+                    }
+
+                    // Get the Matching Keys from the JSON
+                    let matchingKeys = this.getAllMatchingKeys(result, recipeKeys)
+
+                    // Fetch the relevant position of all the keys
+                    let positions = this.findKeyPositions(result, matchingKeys)
+
+                    // Recipe Data
+                    let recipe: any = {}
+
+                    Object.entries(positions)
+                        .forEach(([key, value]: any) => {
+
+                            // Set Current Value
+                            let curr_val = ''
+
+                            // If value has only single element
+                            if (value.length == 1)
+                                curr_val = `${value[0]}`
+
+                            // Iterate for each value present
+                            else if (value.length > 1)
+                                value.forEach((val: any) => {
+                                    curr_val = curr_val.concat(`.${val}`)
+                                })
+
+                            // Matching Recipe Keys
+                            let recipeKey = findBestMatch(key, recipeKeys).bestMatch.target
+
+                            // Find the Property Values for the particular property
+                            let propertyValue = lodash.get(result, curr_val)
+
+                            // Set the Property Type
+                            recipe[`${recipeKey}`] = propertyValue || ''
+                        })
+
+                    // Resolve the promise
+                    resolve({
+                        recipe: {
+                            user_id: 'e8942adc-bb5d-477f-9a0f-ec4a1e98d838',
+                            title: this.checkIfObjectIsEmpty(title || recipe.name) ? '' : (title || recipe.name) || '',
+                            ingredients: this.checkIfObjectIsEmpty(recipe.ingredient) ? [] : recipe.ingredient || [],
+                            original_author: (this.checkIfObjectIsEmpty(recipe.author.name) 
+                                ? (this.checkIfObjectIsEmpty(recipe.author) ? '' : recipe.author)
+                                : recipe.author.name) || '',
+                            image: (this.checkIfObjectIsEmpty(recipe.image.url))
+                                ? (this.checkIfObjectIsEmpty(recipe.image) ? '' : recipe.image)
+                                : (recipe.image.url) || '',
+                            instructions: this.checkIfObjectIsEmpty(recipe.instruction) ? '' : recipe.instruction || [],
+                            recipe_raw : result
+                        },
+                    })
+                } else {
+
+                    // Remove the relevant tags from the dom tag
+                    $('script, style, svg, noscript, link').remove()
+
+                    let result = $('html').html() || ''
+
+                    // Resolve the promise
+                    resolve({
+                        recipe: {
+                            title: title,
+                            recipe_raw : result
+                        }
+                    })
+                }
+
+                // Reject the Promise
+                reject({ message: 'Unable to parse the recipe, please try again with a different URL!' })
+
+            } catch (error) {
+                reject({ error: error })
             }
 
             // Images for the Recipe
             // const images: any = []
-
-            // const title = ($('title').text() || $('meta[property="og:title"]').attr('content'))?.trim().replaceAll('\n', '')
-
-            // // Remove the relevant tags from the dom tag
-            // $('script, style, svg, noscript, link').remove()
 
             // // Create the result
             // let result = $('html').html() || ''
@@ -140,12 +308,6 @@ export class HelperService {
             // let ingredients = doc.match('#Noun').out('array')
             // let check 
             // console.log(ingredients)
-
-            // const author = 'Rian Handler'
-            // const title = 'Classic Stuffed Peppers'
-            // const image = 'https://hips.hearstapps.com/hmg-prod/images/delish-classic-stuffed-peppers-horizontal-1538065876.jpg'
-            // const instructions = `['\nPreheat oven to 400°. In a small saucepan, prepare rice according to package instructions. In a large skillet over medium heat, heat oil. Cook onion until soft, about 5 minutes. Stir in tomato paste and garlic and cook until fragrant, about 1 minute more. Add ground beef and cook, breaking up meat with a wooden spoon, until no longer pink, 6 minutes. Drain fat.\n','\nReturn beef mixture to skillet, then stir in cooked rice and diced tomatoes. Season with oregano, salt, and pepper. Let simmer until liquid has reduced slightly, about 5 minutes.\n','\nPlace peppers cut side-up in a 9"-x-13" baking dish and drizzle with oil. Spoon beef mixture into each pepper and top with Monterey jack, then cover baking dish with foil.\n','\nBake until peppers are tender, about 35 minutes. Uncover and bake until cheese is bubbly, 10 minutes more.\n','\nGarnish with parsley before serving.\n']`
-            // const ingredients = `['\n1/2 c. uncooked rice\n', '\n2 tbsp. extra-virgin olive oil, plus more for drizzling\n','\n1 medium onion, chopped\n','\n2 tbsp. tomato paste\n','\n3 cloves garlic, minced\n','\n1 lb. ground beef\n','\n1 (14.5-oz.) can diced tomatoes\n','\n1 1/2 tsp. dried oregano\n','\nKosher salt\n','\nFreshly ground black pepper\n','\n6 bell peppers, tops and cores removed\n','\n1 c. shredded Monterey jack\n','\nFreshly chopped parsley, for garnish\n']`
 
             // let recipe = {
             //     author: author,
@@ -157,14 +319,6 @@ export class HelperService {
 
             // if (!author || !instructions || !ingredients || !title || !image)
             //     reject('')
-
-            // Resolve the promise
-            // resolve({
-            //     title: title,
-            //     // result: result,
-            //     images: images,
-            //     ingredients: ingredients
-            // })
         })
     }
 }

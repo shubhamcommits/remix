@@ -19,8 +19,17 @@ RecipeRoutes.post('/parse', recipeControllers.parseRecipe)
 // Route Definition
 RecipeRoutes.route('/')
 
-    // Fetch all recipes
+    // Fetch all Recipes
     .get(recipeControllers.fetchAllRecipes)
 
-    // Create new recipe
+    // Create new Recipe
     .post(recipeControllers.createRecipe)
+
+// Route Definition
+RecipeRoutes.route('/:id')
+
+    // Fetch the Recipe by ID 
+    .get(recipeControllers.fetchRecipe)
+
+    // Remove the Recipe
+    .delete(recipeControllers.removeRecipe)

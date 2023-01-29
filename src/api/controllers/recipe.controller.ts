@@ -98,6 +98,126 @@ export class RecipeController {
     }
 
     /**
+    * Fetch Recipe by ID Controller
+    * @param req 
+    * @param res 
+    * @param next 
+    * @returns 
+    */
+    async fetchRecipe(req: Request, res: Response, next: NextFunction) {
+        try {
+
+            // Fetch the ID from the params body
+            let { id } = req.params
+
+            // Validate the ID
+            if (!id) {
+
+                // Send Status 400 response
+                return res.status(400).json({
+                    message: 'Validation Error!',
+                    error: 'Recipe ID is required in the request params!'
+                })
+            }
+
+            // Call the Service Function
+            new RecipeService()
+                .fetchRecipe(id)
+                .then((recipe: any) => {
+
+                    // Recipe is not found
+                    if (recipe == null) {
+
+                        // Send Status 404 response
+                        return res.status(404).json({
+                            success: false,
+                            message: 'Unable to find the requested the Recipe, please try again with a different ID!'
+                        })
+                    }
+
+                    // Send Status 200 response
+                    return res.status(200).json({
+                        success: true,
+                        message: 'Recipe has been fetched successfully!',
+                        recipe: recipe
+                    })
+                })
+                .catch((error) => {
+
+                    // Send Status 400 response
+                    return res.status(400).json({
+                        success: false,
+                        message: error.message,
+                        error: error.stack
+                    })
+                })
+
+        } catch (error) {
+            return SendError(res, error)
+        }
+    }
+
+    /**
+    * Remove Recipe by ID Controller
+    * @param req 
+    * @param res 
+    * @param next 
+    * @returns 
+    */
+    async removeRecipe(req: Request, res: Response, next: NextFunction) {
+        try {
+
+            // Fetch the ID from the params body
+            let { id } = req.params
+
+            // Validate the ID
+            if (!id) {
+
+                // Send Status 400 response
+                return res.status(400).json({
+                    message: 'Validation Error!',
+                    error: 'Recipe ID is required in the request params!'
+                })
+            }
+
+            // Call the Service Function
+            new RecipeService()
+                .removeRecipe(id)
+                .then((recipe: any) => {
+
+                    // Recipe is not found
+                    if (recipe == 0) {
+
+                        // Send Status 404 response
+                        return res.status(404).json({
+                            success: false,
+                            message: 'Unable to find the requested Recipe, please try again with a different ID!'
+                        })
+                    }
+
+                    // Send Status 200 response
+                    return res.status(200).json({
+                        success: true,
+                        message: 'The requested recipe has been removed successfully!',
+                        recipe: recipe
+                    })
+                })
+                .catch((error) => {
+
+                    // Send Status 400 response
+                    return res.status(400).json({
+                        success: false,
+                        message: error.message,
+                        error: error.stack
+                    })
+                })
+
+        } catch (error) {
+            return SendError(res, error)
+        }
+    }
+
+    /**
     * Parse Recipe Controller
     * @param req 
     * @param res 

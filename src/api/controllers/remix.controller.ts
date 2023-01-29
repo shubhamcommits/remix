@@ -11,6 +11,56 @@ import { RemixService } from '../services'
 export class RemixController {
 
     /**
+    * Remix Recipe from OpenAI Controller
+    * @param req 
+    * @param res 
+    * @param next 
+    * @returns 
+    */
+    async remixRecipe(req: Request, res: Response, next: NextFunction) {
+        try {
+
+            // Fetch the data from the request body
+            let { remix_type_name, instructions } = req.body
+
+            // Validate the Data
+            if (!remix_type_name || !instructions) {
+
+                // Send Status 400 response
+                return res.status(400).json({
+                    message: 'Validation Error!',
+                    error: 'Remix Type Name & Instructions are required in the request body!'
+                })
+            }
+
+            // Call the Service Function
+            new RemixService()
+                .remixRecipe(remix_type_name, instructions)
+                .then((data: any) => {
+
+                    // Send Status 200 response
+                    return res.status(200).json({
+                        success: true,
+                        message: 'AI version has been generated successfully!',
+                        data: data
+                    })
+                })
+                .catch((error) => {
+
+                    // Send Status 400 response
+                    return res.status(400).json({
+                        success: false,
+                        message: error.message,
+                        error: error.stack
+                    })
+                })
+
+        } catch (error) {
+            return SendError(res, error)
+        }
+    }
+
+    /**
     * Create Remix Type Controller
     * @param req 
     * @param res 
@@ -139,7 +189,7 @@ export class RemixController {
                     return res.status(200).json({
                         success: true,
                         message: 'All the remix types are fetched successfully!',
-                        remix_types: remix_types.data || []
+                        remix_types: remix_types || []
                     })
                 })
                 .catch((error) => {
@@ -195,7 +245,7 @@ export class RemixController {
             // Call the Service Function
             new RemixService()
                 .updateRemixType(id, name, prompt)
-                .then((data: any) => {
+                .then(() => {
 
                     // Send Status 200 response
                     return res.status(200).json({
@@ -205,7 +255,64 @@ export class RemixController {
                 })
                 .catch((error) => {
 
-                    console.log(error)
+                    // Send Status 400 response
+                    return res.status(400).json({
+                        success: false,
+                        message: error.message,
+                        error: error.stack
+                    })
+                })
+
+        } catch (error) {
+            return SendError(res, error)
+        }
+    }
+
+    /**
+    * Remove Remix Type by ID Controller
+    * @param req 
+    * @param res 
+    * @param next 
+    * @returns 
+    */
+    async removeRemixType(req: Request, res: Response, next: NextFunction) {
+        try {
+
+            // Fetch the ID from the params body
+            let { id } = req.params
+
+            // Validate the ID
+            if (!id) {
+
+                // Send Status 400 response
+                return res.status(400).json({
+                    message: 'Validation Error!',
+                    error: 'Remixed Type ID is required in the request params!'
+                })
+            }
+
+            // Call the Service Function
+            new RemixService()
+                .removeRemixType(id)
+                .then((remixType: any) => {
+
+                    // Remix Type is not found
+                    if (remixType == 0) {
+
+                        // Send Status 404 response
+                        return res.status(404).json({
+                            success: false,
+                            message: 'Unable to find the requested Remix Type ID, please try again with a different ID!'
+                        })
+                    }
+
+                    // Send Status 200 response
+                    return res.status(200).json({
+                        success: true,
+                        message: 'The requested Remix Type has been removed successfully!'
+                    })
+                })
+                .catch((error) => {
 
                     // Send Status 400 response
                     return res.status(400).json({
@@ -227,31 +334,41 @@ export class RemixController {
     * @param next 
     * @returns 
     */
-    async createRemixRecipe(req: Request, res: Response, next: NextFunction) {
+    async createRemixedRecipe(req: Request, res: Response, next: NextFunction) {
         try {
 
             // Fetch the data from the request body
-            let { remix_type, remix_raw, ingredients, instructions } = req.body
+            let { remix_type, recipe_id } = req.body
 
             // Validate the Data
-            if (!remix_type || !remix_raw) {
+            if (!remix_type || !recipe_id) {
 
                 // Send Status 400 response
                 return res.status(400).json({
                     message: 'Validation Error!',
-                    error: 'Recipe Type & Raw Recipe are required in the request body!'
+                    error: 'Recipe Type & Base Recipe ID are required in the request body!'
                 })
             }
 
             // Call the Service Function
             new RemixService()
-                .createRemixRecipe(remix_type, remix_raw, ingredients, instructions)
+                .createRemixedRecipe(remix_type, recipe_id)
                 .then((data: any) => {
+
+                    // Recipe is not found
+                    if (data == null) {
+
+                        // Send Status 404 response
+                        return res.status(404).json({
+                            success: false,
+                            message: data.message
+                        })
+                    }
 
                     // Send Status 200 response
                     return res.status(200).json({
                         success: true,
-                        message: 'New Remix Recipe has been created successfully!',
+                        message: 'New Remixed Recipe has been created successfully & shall be updated with the response by AI soon ...!',
                         remix: data
                     })
                 })
@@ -331,25 +448,25 @@ export class RemixController {
     }
 
     /**
-    * Fetch All Remix Recipes Controller
+    * Fetch All Remixed Recipes Controller
     * @param req 
     * @param res 
     * @param next 
     * @returns 
     */
-    async fetchAllRemixRecipes(req: Request, res: Response, next: NextFunction) {
+    async fetchAllRemixedRecipes(req: Request, res: Response, next: NextFunction) {
         try {
 
             // Call the Service Function
             new RemixService()
-                .fetchAllRemixRecipes()
+                .fetchAllRemixedRecipes()
                 .then((remixes: any) => {
 
                     // Send Status 200 response
                     return res.status(200).json({
                         success: true,
-                        message: 'All the remix recipes are fetched successfully!',
-                        remixes: remixes.data || []
+                        message: 'All the remixed recipes are fetched successfully!',
+                        remixes: remixes || []
                     })
                 })
                 .catch((error) => {
@@ -378,7 +495,7 @@ export class RemixController {
         try {
 
             // Fetch the data from the request body
-            let { remix_type, remix_raw, ingredients, instructions } = req.body
+            let { remix_type, recipe_id, title, ingredients, instructions } = req.body
 
             // Fetch the ID from the params body
             let { id } = req.params
@@ -394,7 +511,7 @@ export class RemixController {
             }
 
             // Validate the Data
-            if (!remix_type || !remix_raw) {
+            if (!remix_type || !recipe_id) {
 
                 // Send Status 400 response
                 return res.status(400).json({
@@ -405,8 +522,8 @@ export class RemixController {
 
             // Call the Service Function
             new RemixService()
-                .updateRemixedRecipe(id, remix_type, remix_raw, ingredients, instructions)
-                .then((data: any) => {
+                .updateRemixedRecipe(id, remix_type, recipe_id, title, ingredients, instructions)
+                .then(() => {
 
                     // Send Status 200 response
                     return res.status(200).json({
@@ -431,5 +548,63 @@ export class RemixController {
         }
     }
 
+    /**
+    * Remove Remixed Recipe by ID Controller
+    * @param req 
+    * @param res 
+    * @param next 
+    * @returns 
+    */
+    async removeRemixedRecipe(req: Request, res: Response, next: NextFunction) {
+        try {
+
+            // Fetch the ID from the params body
+            let { id } = req.params
+
+            // Validate the ID
+            if (!id) {
+
+                // Send Status 400 response
+                return res.status(400).json({
+                    message: 'Validation Error!',
+                    error: 'Remixed Recipe ID is required in the request params!'
+                })
+            }
+
+            // Call the Service Function
+            new RemixService()
+                .removeRemixedRecipe(id)
+                .then((remix: any) => {
+
+                    // Remixed Recipe is not found
+                    if (remix == 0) {
+
+                        // Send Status 404 response
+                        return res.status(404).json({
+                            success: false,
+                            message: 'Unable to find the requested Remixed Recipe, please try again with a different ID!'
+                        })
+                    }
+
+                    // Send Status 200 response
+                    return res.status(200).json({
+                        success: true,
+                        message: 'The requested remixed recipe has been removed successfully!'
+                    })
+                })
+                .catch((error) => {
+
+                    // Send Status 400 response
+                    return res.status(400).json({
+                        success: false,
+                        message: error.message,
+                        error: error.stack
+                    })
+                })
+
+        } catch (error) {
+            return SendError(res, error)
+        }
+    }
 
 }

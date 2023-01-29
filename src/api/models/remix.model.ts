@@ -15,9 +15,14 @@ Remix.init({
         primaryKey: true,
         allowNull: false
     },
-    remix_raw: {
-        type: DataTypes.TEXT,
-        defaultValue: ''
+    recipe_id: {
+        type: DataTypes.UUID,
+        allowNull: false
+    },
+    title: {
+        type: DataTypes.STRING,
+        defaultValue: 'New Title',
+        allowNull: false
     },
     ingredients: {
         type: DataTypes.JSON,
@@ -31,4 +36,4 @@ Remix.init({
         type: DataTypes.UUID,
         allowNull: true
     }
-}, { sequelize: db })
+}, { sequelize: db,  engine: 'InnoDB' })
