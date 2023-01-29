@@ -7,9 +7,6 @@ import cheerio from 'cheerio'
 // Import Dice's Coefficient String Similarity
 import { compareTwoStrings, findBestMatch } from 'string-similarity'
 
-// Import NLP Module
-import nlp from 'compromise'
-
 // Import lodash Module
 import lodash from 'lodash'
 
