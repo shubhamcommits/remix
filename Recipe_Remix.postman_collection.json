@@ -1,0 +1,577 @@
+{
+	"info": {
+		"_postman_id": "818cad53-1e95-42ab-a963-5500a0ed3254",
+		"name": "Recipe Remix",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25078168"
+	},
+	"item": [
+		{
+			"name": "Auths",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"development.shubhamsingh@gmail.com\",\n    \"password\": \"123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/auths/login",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"auths",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Recipes",
+			"item": [
+				{
+					"name": "Fetch All Recipes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_API_URL}}/recipes/",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"recipes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Recipe",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_API_URL}}/recipes/f48b888d-51f6-4398-b12d-2cc9baf48233",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"recipes",
+								"f48b888d-51f6-4398-b12d-2cc9baf48233"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Parse Recipe",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"url\": \"https://www.vegrecipesofindia.com/shahi-paneer/\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/recipes/parse",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"recipes",
+								"parse"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Recipe",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"url\": \"https://www.vegrecipesofindia.com/shahi-paneer/\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/recipes/",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"recipes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Recipe",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/recipes/a9f60a26-68f2-4983-b7b4-a1dcef8e8589",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"recipes",
+								"a9f60a26-68f2-4983-b7b4-a1dcef8e8589"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extract Recipe",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"raw_recipe\": \" \\n\\nGluten-Free Shaheepaneer \\n\\nIngredients: \\n\\n-1/2 cup gluten-free all-purpose flour \\n-1/2 cup gluten-free bread crumbs \\n-2 tablespoons soy sauce\\n-2 tablespoons vegetable oil\\n-2 tablespoons vegetable broth\\n-2 tablespoons tomato paste \\n-2 tablespoons Worcestershire sauce\\n-1 teaspoon garlic powder\\n-1 teaspoon onion powder\\n-1 teaspoon paprika\\n-1 teaspoon chili powder\\n-1/2 teaspoon cayenne pepper\\n-1/2 teaspoon black pepper\\n-1/2 teaspoon white pepper\\n-1/2 cup crumbled paneer\\n-1/2 cup green peas\\n-1/2 cup corn\\n-1/2 cup Aerospace\\n-1/2 cup plain yogurt\\n-1/2 teaspoon ground cloves\\n-1/2 teaspoon Fallen Leaves Tea Powder\\n-1/2 teaspoon ground cardamom\\n-1/2 teaspoon ground cinnamon\\n-1/2 teaspoon ground nutmeg\\n-1 tablespoon minced fresh ginger\\n-1 tablespoon minced fresh garlic\\n-Cooking spray\\n-1/4 cup chopped cilantro\\n-1/4 cup chopped parsley\\n-1/4 cup diced mango\\n\\nInstructions: \\n\\n1. Preheat oven to 350°F.\\n\\n2. In a large bowl, whisk together the gluten-free flour, bread crumbs, soy sauce, vegetable oil, vegetable broth, tomato paste, Worcestershire sauce, garlic powder, onion powder, paprika, chili powder, cayenne pepper, black pepper and white pepper.\\n\\n3. Add the crumbled paneer, green peas, corn, Aerospace, yogurt, ground cloves, Fallen Leaves Tea Powder, ground cardamom, ground cloves, ground cinnamon, ground nutmeg, fresh ginger and fresh garlic. Stir until everything is evenly combined.\\n\\n4. Grease a 9x13 baking dish with cooking spray and pour the mixture into the dish.\\n\\n5. Bake for 20 minutes, or until the center is firm and the edges are lightly browned.\\n\\n6. Sprinkle the chopped cilantro and parsley on top of the shaheepaneer.\\n\\n7. Top with the diced mango and serve warm. Enjoy!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/recipes/extract",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"recipes",
+								"extract"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Remixes",
+			"item": [
+				{
+					"name": "Remix Recipes",
+					"item": [
+						{
+							"name": "Fetch All Remix Recipes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_API_URL}}/remixes/",
+									"host": [
+										"{{BASE_API_URL}}"
+									],
+									"path": [
+										"remixes",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Fetch Remixed Recipe",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_API_URL}}/remixes/d5701271-c341-4b78-b413-cc14780e28de",
+									"host": [
+										"{{BASE_API_URL}}"
+									],
+									"path": [
+										"remixes",
+										"d5701271-c341-4b78-b413-cc14780e28de"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Remixed Recipe",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"remix_type\": \"67a0979d-5f06-4bbf-8749-b630fdf6ed7f\",\n    \"remix_raw\": \" \\n\\nGluten-Free Shaheepaneer \\n\\nIngredients: \\n\\n-1/2 cup gluten-free all-purpose flour \\n-1/2 cup gluten-free bread crumbs \\n-2 tablespoons soy sauce\\n-2 tablespoons vegetable oil\\n-2 tablespoons vegetable broth\\n-2 tablespoons tomato paste \\n-2 tablespoons Worcestershire sauce\\n-1 teaspoon garlic powder\\n-1 teaspoon onion powder\\n-1 teaspoon paprika\\n-1 teaspoon chili powder\\n-1/2 teaspoon cayenne pepper\\n-1/2 teaspoon black pepper\\n-1/2 teaspoon white pepper\\n-1/2 cup crumbled paneer\\n-1/2 cup green peas\\n-1/2 cup corn\\n-1/2 cup Aerospace\\n-1/2 cup plain yogurt\\n-1/2 teaspoon ground cloves\\n-1/2 teaspoon Fallen Leaves Tea Powder\\n-1/2 teaspoon ground cardamom\\n-1/2 teaspoon ground cinnamon\\n-1/2 teaspoon ground nutmeg\\n-1 tablespoon minced fresh ginger\\n-1 tablespoon minced fresh garlic\\n-Cooking spray\\n-1/4 cup chopped cilantro\\n-1/4 cup chopped parsley\\n-1/4 cup diced mango\\n\\nInstructions: \\n\\n1. Preheat oven to 350°F.\\n\\n2. In a large bowl, whisk together the gluten-free flour, bread crumbs, soy sauce, vegetable oil, vegetable broth, tomato paste, Worcestershire sauce, garlic powder, onion powder, paprika, chili powder, cayenne pepper, black pepper and white pepper.\\n\\n3. Add the crumbled paneer, green peas, corn, Aerospace, yogurt, ground cloves, Fallen Leaves Tea Powder, ground cardamom, ground cloves, ground cinnamon, ground nutmeg, fresh ginger and fresh garlic. Stir until everything is evenly combined.\\n\\n4. Grease a 9x13 baking dish with cooking spray and pour the mixture into the dish.\\n\\n5. Bake for 20 minutes, or until the center is firm and the edges are lightly browned.\\n\\n6. Sprinkle the chopped cilantro and parsley on top of the shaheepaneer.\\n\\n7. Top with the diced mango and serve warm. Enjoy!\",\n    \"ingredients\": [\n        \"-1/2 cup gluten-free all-purpose flour\",\n        \"-1/2 cup gluten-free bread crumbs\",\n        \"-2 tablespoons soy sauce\",\n        \"-2 tablespoons vegetable oil\",\n        \"-2 tablespoons vegetable broth\",\n        \"-2 tablespoons tomato paste\",\n        \"-2 tablespoons Worcestershire sauce\",\n        \"-1 teaspoon garlic powder\",\n        \"-1 teaspoon onion powder\",\n        \"-1 teaspoon paprika\",\n        \"-1 teaspoon chili powder\",\n        \"-1/2 teaspoon cayenne pepper\",\n        \"-1/2 teaspoon black pepper\",\n        \"-1/2 teaspoon white pepper\",\n        \"-1/2 cup crumbled paneer\",\n        \"-1/2 cup green peas\",\n        \"-1/2 cup corn\",\n        \"-1/2 cup Aerospace\",\n        \"-1/2 cup plain yogurt\",\n        \"-1/2 teaspoon ground cloves\",\n        \"-1/2 teaspoon Fallen Leaves Tea Powder\",\n        \"-1/2 teaspoon ground cardamom\",\n        \"-1/2 teaspoon ground cinnamon\",\n        \"-1/2 teaspoon ground nutmeg\",\n        \"-1 tablespoon minced fresh ginger\",\n        \"-1 tablespoon minced fresh garlic\",\n        \"-Cooking spray\",\n        \"-1/4 cup chopped cilantro\",\n        \"-1/4 cup chopped parsley\",\n        \"-1/4 cup diced mango\"\n    ],\n    \"instructions\": [\n        \"1. Preheat oven to 350°F.\",\n        \"2. In a large bowl, whisk together the gluten-free flour, bread crumbs, soy sauce, vegetable oil, vegetable broth, tomato paste, Worcestershire sauce, garlic powder, onion powder, paprika, chili powder, cayenne pepper, black pepper and white pepper.\",\n        \"3. Add the crumbled paneer, green peas, corn, Aerospace, yogurt, ground cloves, Fallen Leaves Tea Powder, ground cardamom, ground cloves, ground cinnamon, ground nutmeg, fresh ginger and fresh garlic. Stir until everything is evenly combined.\",\n        \"4. Grease a 9x13 baking dish with cooking spray and pour the mixture into the dish.\",\n        \"5. Bake for 20 minutes, or until the center is firm and the edges are lightly browned.\",\n        \"6. Sprinkle the chopped cilantro and parsley on top of the shaheepaneer.\",\n        \"7. Top with the diced mango and serve warm. Enjoy!\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_API_URL}}/remixes/c96725df-1a68-4ac0-9c9a-304996e84e09",
+									"host": [
+										"{{BASE_API_URL}}"
+									],
+									"path": [
+										"remixes",
+										"c96725df-1a68-4ac0-9c9a-304996e84e09"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove Remixed Recipe",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_API_URL}}/remixes/a9f60a26-68f2-4983-b7b4-a1dcef8e8589",
+									"host": [
+										"{{BASE_API_URL}}"
+									],
+									"path": [
+										"remixes",
+										"a9f60a26-68f2-4983-b7b4-a1dcef8e8589"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Remix Recipe",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"remix_type\": \"0c30c832-e30e-4f4a-89e7-cbad7d151e6a\",\n    \"recipe_id\": \"f48b888d-51f6-4398-b12d-2cc9baf48233\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_API_URL}}/remixes/",
+									"host": [
+										"{{BASE_API_URL}}"
+									],
+									"path": [
+										"remixes",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "AI Remix Recipe",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"remix_type_name\": \"dairy-free\",\n    \"instructions\": [\n        \"Heat 1 tablespoon oil in a large saucepan over medium-high heat. Add onion and garlic. Cook, stirring, for 3 minutes until onion is soft. Add rice. Stir to coat in mixture. Add stock, 1 teaspoon curry powder, 2 teaspoons cumin and chickpeas. Stir to combine. Cover. Reduce heat to medium-low. Cook for 12 to 15 minutes or until the liquid is absorbed. Remove from heat. Set aside for 10 minutes. Fluff rice with a fork to separate grains.\",\n        \"Meanwhile, heat 1 tablespoon of remaining oil in a large non-stick frying pan over high heat. Add lamb. Sprinkle with remaining curry powder and cumin. Season with salt and pepper. Cook for 2 minutes, stirring once, until the lamb is browned and heated through. Transfer to a large bowl.\",\n        \"Add rice mixture, currants, coriander, parsley, lemon juice and remaining oil to the lamb. Toss gently to combine. Season with salt and pepper. Serve sprinkled with pomegranate seeds.\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_API_URL}}/remixes/generate",
+									"host": [
+										"{{BASE_API_URL}}"
+									],
+									"path": [
+										"remixes",
+										"generate"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Remix Type",
+					"item": [
+						{
+							"name": "Fetch All Remix Types",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_API_URL}}/remixes/types",
+									"host": [
+										"{{BASE_API_URL}}"
+									],
+									"path": [
+										"remixes",
+										"types"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Fetch Remix Type",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_API_URL}}/remixes/types/0c30c832-e30e-4f4a-89e7-cbad7d151e6a",
+									"host": [
+										"{{BASE_API_URL}}"
+									],
+									"path": [
+										"remixes",
+										"types",
+										"0c30c832-e30e-4f4a-89e7-cbad7d151e6a"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Remix Type",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"dairy-free\",\n    \"prompt\": \"Dairy Free Remix Type\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_API_URL}}/remixes/types",
+									"host": [
+										"{{BASE_API_URL}}"
+									],
+									"path": [
+										"remixes",
+										"types"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Remix Type",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{   \n    \"name\": \"dairy-free\",\n    \"prompt\": \"Dairy Free Remix Type has been updated\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_API_URL}}/remixes/types/0c30c832-e30e-4f4a-89e7-cbad7d151e6a",
+									"host": [
+										"{{BASE_API_URL}}"
+									],
+									"path": [
+										"remixes",
+										"types",
+										"0c30c832-e30e-4f4a-89e7-cbad7d151e6a"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove Remix Type",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_API_URL}}/remixes/a9f60a26-68f2-4983-b7b4-a1dcef8e8589",
+									"host": [
+										"{{BASE_API_URL}}"
+									],
+									"path": [
+										"remixes",
+										"a9f60a26-68f2-4983-b7b4-a1dcef8e8589"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Shubham Singh\",\n    \"email\": \"inbox.shubhamsingh@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/users/",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chat GPT Request",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "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",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"prompt\": \"What is the meaning of life?\",\n    \"temperature\": 0.5,\n    \"max_tokens\": 100\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.openai.com/v1/engines/davinci-codex/completions",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openai",
+						"com"
+					],
+					"path": [
+						"v1",
+						"engines",
+						"davinci-codex",
+						"completions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Open AI Completion",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer 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"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"model\": \"text-davinci-003\",\n    \"prompt\": \"Please take the following recipe and make it gluten-free. Kindly provide title, instructions, and ingredients. \\n\\n1. Preheat oven to 350°F.\\n\\n2. In a large bowl, whisk together the flour, bread crumbs, soy sauce, vegetable oil, vegetable broth, tomato paste, Worcestershire sauce, garlic powder, onion powder, paprika, chili powder, cayenne pepper, black pepper and white pepper.\\n\\n3. Add the crumbled paneer, green peas, corn, Aerospace, yogurt, ground cloves, Fallen Leaves Tea Powder, ground cardamom, ground cloves, ground cinnamon, ground nutmeg, fresh ginger and fresh garlic. Stir until everything is evenly combined.\\n\\n4. Grease a 9x13 baking dish with cooking spray and pour the mixture into the dish.\\n\\n5. Bake for 20 minutes, or until the center is firm and the edges are lightly browned.\\n\\n6. Sprinkle the chopped cilantro and parsley on top of the shaheepaneer.\\n\\n7. Top with the diced mango and serve warm.\\n\\nEnjoy!\",\n    \"temperature\": 0.7,\n    \"max_tokens\": 3000,\n    \"top_p\": 1,\n    \"frequency_penalty\": 0,\n    \"presence_penalty\": 0\n}"
+				},
+				"url": {
+					"raw": "https://api.openai.com/v1/completions",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openai",
+						"com"
+					],
+					"path": [
+						"v1",
+						"completions"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
