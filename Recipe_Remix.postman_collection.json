@@ -505,7 +505,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "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",
+							"value": "",
 							"type": "string"
 						}
 					]
@@ -550,12 +550,12 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer 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"
+						"value": ""
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"model\": \"text-davinci-003\",\n    \"prompt\": \"Please take the following recipe and make it gluten-free. Kindly provide title, instructions, and ingredients. \\n\\n1. Preheat oven to 350°F.\\n\\n2. In a large bowl, whisk together the flour, bread crumbs, soy sauce, vegetable oil, vegetable broth, tomato paste, Worcestershire sauce, garlic powder, onion powder, paprika, chili powder, cayenne pepper, black pepper and white pepper.\\n\\n3. Add the crumbled paneer, green peas, corn, Aerospace, yogurt, ground cloves, Fallen Leaves Tea Powder, ground cardamom, ground cloves, ground cinnamon, ground nutmeg, fresh ginger and fresh garlic. Stir until everything is evenly combined.\\n\\n4. Grease a 9x13 baking dish with cooking spray and pour the mixture into the dish.\\n\\n5. Bake for 20 minutes, or until the center is firm and the edges are lightly browned.\\n\\n6. Sprinkle the chopped cilantro and parsley on top of the shaheepaneer.\\n\\n7. Top with the diced mango and serve warm.\\n\\nEnjoy!\",\n    \"temperature\": 0.7,\n    \"max_tokens\": 3000,\n    \"top_p\": 1,\n    \"frequency_penalty\": 0,\n    \"presence_penalty\": 0\n}"
+					"raw": "{\n    \"model\": \"text-davinci-003\",\n    \"prompt\": \"Please take the following recipe and make it gluten-free. Kindly provide a JSON containing title, instructions, and ingredients. \\n\\n1. Preheat oven to 350°F.\\n\\n2. In a large bowl, whisk together the flour, bread crumbs, soy sauce, vegetable oil, vegetable broth, tomato paste, Worcestershire sauce, garlic powder, onion powder, paprika, chili powder, cayenne pepper, black pepper and white pepper.\\n\\n3. Add the crumbled paneer, green peas, corn, Aerospace, yogurt, ground cloves, Fallen Leaves Tea Powder, ground cardamom, ground cloves, ground cinnamon, ground nutmeg, fresh ginger and fresh garlic. Stir until everything is evenly combined.\\n\\n4. Grease a 9x13 baking dish with cooking spray and pour the mixture into the dish.\\n\\n5. Bake for 20 minutes, or until the center is firm and the edges are lightly browned.\\n\\n6. Sprinkle the chopped cilantro and parsley on top of the shaheepaneer.\\n\\n7. Top with the diced mango and serve warm.\\n\\nEnjoy!\",\n    \"temperature\": 0.7,\n    \"max_tokens\": 3000,\n    \"top_p\": 1,\n    \"frequency_penalty\": 0,\n    \"presence_penalty\": 0\n}"
 				},
 				"url": {
 					"raw": "https://api.openai.com/v1/completions",
