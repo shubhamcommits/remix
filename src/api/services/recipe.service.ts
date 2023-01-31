@@ -156,16 +156,17 @@ export class RecipeService {
 
                         // Resolve the Promise
                         resolve({
-                            message: 'Recipe has been parsed successfully!',
-                            recipe: data
+                            message: data.message,
+                            recipe: data.recipe
                         })
                     })
                     .catch((error: any) => {
 
                         // Reject the Promise
                         reject({
-                            message: 'Unable to parse the recipe!',
-                            data: error
+                            message: error.message,
+                            recipe: error.recipe,
+                            error: error.stack
                         })
                     })
 

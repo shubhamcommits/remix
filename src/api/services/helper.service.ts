@@ -25,10 +25,11 @@ export class HelperService {
             axios.get(url)
                 .then(async (response) => {
 
-                    let recipe = await new HelperService().parseRecipeAndIngredients(response.data)
+                    // Fetch Recipe from Custom Module
+                    let data: any = await new HelperService().parseRecipeAndIngredients(response.data)
 
                     // Resolve the Promise
-                    resolve(recipe)
+                    resolve({ message: data.message, recipe: data.recipe })
 
                 })
                 .catch((error) => {
@@ -184,22 +185,127 @@ export class HelperService {
     }
 
     /**
+     * This function consumes a raw html and returns the raw page content
+     * @param html 
+     * @returns 
+     */
+    returnRawResult(html: any) {
+
+        // Load the Cheerio
+        const $ = cheerio.load(html)
+
+        // Remove the relevant tags from the dom tag
+        $('script, style, svg, noscript, link').remove()
+
+        let result = $('html').text() || ''
+        result = result.replace(/\n/g, '').replace(/\t/g, '')
+
+        // Resolve the promise
+        return result.trim()
+    }
+
+    /**
+     * This function is responsible for extracting the recipe from raw recipe object
+     * @param recipe 
+     * @returns 
+     */
+    extractRecipeDetails(recipe: any) {
+
+        try {
+
+            // Extract the Name of the Recipe
+            if (typeof recipe['name'] != 'undefined' && recipe['name']) {
+                recipe['name'] = recipe['name']
+            } else if (typeof recipe['headline'] != 'undefined' && recipe['headline']) {
+                recipe['name'] = recipe['headline']
+            }
+
+            // Extract the Base Image of the Recipe
+            if (typeof recipe['image'] != 'undefined' && recipe['image']) {
+
+                if (typeof recipe['image'] == "object" && Array.isArray(recipe['image']) == false)
+                    recipe['image'] = recipe['image']['url']
+                else if (Array.isArray(recipe['image']) == true)
+                    recipe['image'] = recipe['image'][0]
+                else
+                    recipe['image'] = recipe['image']
+            }
+
+            // Extract the Author of the Recipe
+            if (typeof recipe['author'] != 'undefined' && recipe['author']) {
+
+                if (typeof recipe['author'] == "object" && Array.isArray(recipe['author'])) {
+                    recipe['author'] = recipe['author'][0]
+                }
+                if (typeof recipe['author'] == "object")
+                    recipe['author'] = recipe['author']['name']
+                else
+                    recipe['author'] = recipe['author']
+            }
+
+            // Extract the Ingredient of the Recipe
+            if (typeof recipe['ingredient'] != 'undefined' && recipe['ingredient']) {
+
+                if (recipe['ingredient'].length) {
+                    let ingredients: any = []
+                    recipe['ingredient'].forEach((ele: any) => {
+                        ingredients.push(ele.trim())
+                    })
+                    recipe['ingredient'] = ingredients
+                }
+            }
+
+            // Exract the instruction of the Recipe
+            if (typeof recipe['instruction'] != 'undefined' && recipe['instruction']) {
+
+                if (Array.isArray(recipe['instruction']) == true && recipe['instruction'].length) {
+                    let instructions: any = []
+                    recipe['instruction']
+                        .forEach((ele: any) => {
+                            if (typeof ele == 'object' && ele.hasOwnProperty('itemListElement') == true && ele['itemListElement'].length)
+                                ele['itemListElement'].forEach((step: any) => {
+                                    instructions.push(step['text'].trim())
+                                })
+                            else if (typeof ele == 'object' && ele.hasOwnProperty('itemListElement') == false)
+                                instructions.push(ele['text'].trim())
+                        })
+
+                    if (instructions.length != 0)
+                        recipe['instruction'] = instructions
+                } else if (Array.isArray(recipe['instruction']) == false) {
+                    recipe['instruction'] = recipe['instruction'].split(',  ').map((item: any) => item.trim())
+                }
+            }
+
+            if(recipe['instruction'].length == 0 || recipe['ingredient'].length == 0)
+                return null
+
+            // Return Recipe Object
+            return recipe
+
+        } catch (error) {
+            return null
+        }
+    }
+
+    /**
      * This function is responsible for fetching the data from an URL and parsing the recipes out from it
      * @param html 
      * @returns 
      */
     parseRecipeAndIngredients(html: any) {
         return new Promise((resolve, reject) => {
+
+            // Load the Cheerio
+            const $ = cheerio.load(html)
+
+            // Fetch the LD-JSON Script
+            const ldJsonScript = $('script[type="application/ld+json"]').first().text().trim()
+
+            // Fetch the Title
+            const title = ($('title').text() || $('meta[property="og:title"]').attr('content'))?.trim().replaceAll('\n', '')
+
             try {
-
-                // Load the Cheerio
-                const $ = cheerio.load(html)
-
-                // Fetch the LD-JSON Script
-                const ldJsonScript = $('script[type="application/ld+json"]').html()
-
-                // Fetch the Title
-                const title = ($('title').text() || $('meta[property="og:title"]').attr('content'))?.trim().replaceAll('\n', '')
 
                 // Check if LD-JSON Script exist
                 if (ldJsonScript != null || ldJsonScript != undefined) {
@@ -210,12 +316,17 @@ export class HelperService {
                     // Parse the JSON
                     let result: any = JSON.parse(ldJsonScript || '')
 
+                    if (Array.isArray(result))
+                        result = result[0]
+
                     // If @type is not found
-                    if(result['@type'] == undefined){
+                    if (result['@type'] == undefined) {
 
                         // Find Recipe Object
-                        let recipeIndex = result['@graph'].findIndex((item: any)=> item['@type'] == 'Recipe')
-                        if(recipeIndex != -1)
+                        let recipeIndex = result['@graph'].findIndex((item: any) => item['@type'] == 'Recipe')
+                        if(recipeIndex == -1)
+                            recipeIndex = result['@graph'].findIndex((item: any) => item['@type'] == 'BlogPosting')
+                        if (recipeIndex != -1)
                             result = result['@graph'][recipeIndex]
 
                         // let personIndex = result['@graph'].findIndex((item: any)=> item['@type'] == 'Person')
@@ -227,95 +338,109 @@ export class HelperService {
                     // Fetch the relevant position of all the keys
                     let positions = this.findKeyPositions(result, matchingKeys)
 
-                    // Recipe Data
-                    let recipe: any = {}
+                    // Fetch the list of Keys Size
+                    let keysSize = Object.keys(positions).length
 
-                    Object.entries(positions)
-                        .forEach(([key, value]: any) => {
+                    if (keysSize == recipeKeys.length) {
 
-                            // Set Current Value
-                            let curr_val = ''
+                        // Recipe Data
+                        let recipe: any = {}
 
-                            // If value has only single element
-                            if (value.length == 1)
-                                curr_val = `${value[0]}`
+                        Object.entries(positions)
+                            .forEach(([key, value]: any) => {
 
-                            // Iterate for each value present
-                            else if (value.length > 1)
-                                value.forEach((val: any) => {
-                                    curr_val = curr_val.concat(`.${val}`)
-                                })
+                                // Set Current Value
+                                let curr_val = ''
 
-                            // Matching Recipe Keys
-                            let recipeKey = findBestMatch(key, recipeKeys).bestMatch.target
+                                // If value has only single element
+                                if (value.length == 1)
+                                    curr_val = `${value[0]}`
 
-                            // Find the Property Values for the particular property
-                            let propertyValue = lodash.get(result, curr_val)
+                                // Iterate for each value present
+                                else if (value.length > 1)
+                                    value.forEach((val: any) => {
+                                        curr_val = curr_val.concat(`.${val}`)
+                                    })
 
-                            // Set the Property Type
-                            recipe[`${recipeKey}`] = propertyValue || ''
+                                // Matching Recipe Keys
+                                let recipeKey = findBestMatch(key, recipeKeys).bestMatch.target
+
+                                // Find the Property Values for the particular property
+                                let propertyValue = lodash.get(result, curr_val)
+
+                                // Set the Property Type
+                                recipe[`${recipeKey}`] = propertyValue || ''
+                            })
+
+                        // Extract Recipe Details
+                        let data = this.extractRecipeDetails(recipe)
+
+                        if (data == null) {
+
+                            // Resolve the promise
+                            reject({
+                                message: 'Unable to fetch the Recipe, however the Raw Data has been parsed successfully!',
+                                recipe: {
+                                    title: title,
+                                    recipe_raw: this.returnRawResult(html)
+                                }
+                            })
+
+                        }
+
+                        // Assign the recipe data
+                        recipe = data
+
+                        // Resolve the promise
+                        resolve({
+                            message: 'Recipe has been parsed successfully!',
+                            recipe: {
+                                user_id: 'e8942adc-bb5d-477f-9a0f-ec4a1e98d838',
+                                title: recipe.name || title,
+                                ingredients: recipe.ingredient || [],
+                                original_author: recipe.author || '',
+                                image: recipe.image || '',
+                                instructions: recipe.instruction || [],
+                                recipe_raw: JSON.parse(ldJsonScript)
+                            }
                         })
+                    }
 
-                    // Resolve the promise
-                    resolve({
-                        recipe: {
-                            user_id: 'e8942adc-bb5d-477f-9a0f-ec4a1e98d838',
-                            title: this.checkIfObjectIsEmpty(title || recipe.name) ? '' : (title || recipe.name) || '',
-                            ingredients: this.checkIfObjectIsEmpty(recipe.ingredient) ? [] : recipe.ingredient || [],
-                            original_author: (this.checkIfObjectIsEmpty(recipe.author.name) 
-                                ? (this.checkIfObjectIsEmpty(recipe.author) ? '' : recipe.author)
-                                : recipe.author.name) || '',
-                            image: (this.checkIfObjectIsEmpty(recipe.image.url))
-                                ? (this.checkIfObjectIsEmpty(recipe.image) ? '' : recipe.image)
-                                : (recipe.image.url) || '',
-                            instructions: this.checkIfObjectIsEmpty(recipe.instruction) ? '' : recipe.instruction || [],
-                            recipe_raw : result
-                        },
-                    })
+                    else {
+
+                        // Reject the promise
+                        reject({
+                            message: 'Unable to fetch the Recipe, however the Raw Data has been parsed successfully!',
+                            recipe: {
+                                title: title,
+                                recipe_raw: this.returnRawResult(html)
+                            }
+                        })
+                    }
                 } else {
 
-                    // Remove the relevant tags from the dom tag
-                    $('script, style, svg, noscript, link').remove()
-
-                    let result = $('html').html() || ''
-
-                    // Resolve the promise
-                    resolve({
+                    // Reject the promise
+                    reject({
+                        message: 'Unable to fetch the Recipe, however the Raw Data has been parsed successfully!',
                         recipe: {
                             title: title,
-                            recipe_raw : result
+                            recipe_raw: this.returnRawResult(html)
                         }
                     })
                 }
 
-                // Reject the Promise
-                reject({ message: 'Unable to parse the recipe, please try again with a different URL!' })
-
             } catch (error) {
-                reject({ error: error })
+
+                // Reject the Promise
+                reject({
+                    message: 'Unable to fetch the Recipe, however the Raw Data has been parsed successfully!',
+                    error: error,
+                    recipe: {
+                        title: title,
+                        recipe_raw: this.returnRawResult(html)
+                    }
+                })
             }
-
-            // Images for the Recipe
-            // const images: any = []
-
-            // // Create the result
-            // let result = $('html').html() || ''
-
-            // let doc = nlp($('body').text())
-            // let ingredients = doc.match('#Noun').out('array')
-            // let check 
-            // console.log(ingredients)
-
-            // let recipe = {
-            //     author: author,
-            //     title: title,
-            //     image: image,
-            //     instructions: instructions,
-            //     ingredients: ingredients
-            // }
-
-            // if (!author || !instructions || !ingredients || !title || !image)
-            //     reject('')
         })
     }
 }

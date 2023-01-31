@@ -252,13 +252,14 @@ export class RecipeController {
                         recipe: data.recipe
                     })
                 })
-                .catch((error: any) => {
+                .catch((data: any) => {
 
                     // Send Status 400 response
                     return res.status(400).json({
                         success: false,
-                        message: error.message,
-                        error: error.data
+                        message: data.message,
+                        recipe: data.recipe,
+                        error: data.error
                     })
                 })
 
