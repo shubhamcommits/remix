@@ -256,10 +256,11 @@ export class RecipeController {
 
                     // Send Status 400 response
                     return res.status(400).json({
+                        code: data.code,
                         success: false,
                         message: data.message,
-                        recipe: data.recipe,
-                        error: data.error
+                        description: data.description
+                        // recipe: data.recipe,
                     })
                 })
 

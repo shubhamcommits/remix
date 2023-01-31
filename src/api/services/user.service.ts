@@ -26,7 +26,7 @@ export class UserService {
                         // Reject the Promise
                         reject({
                             message: 'Unable to create the new user, please try again!',
-                            astack: error
+                            stack: error
                         })
                     })
 

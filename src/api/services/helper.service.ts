@@ -34,8 +34,32 @@ export class HelperService {
                 })
                 .catch((error) => {
 
-                    // Reject the error
-                    reject(error)
+                    if (error.response) {
+
+                        // Reject the error
+                        reject({ 
+                            message: `${error.message}`, 
+                            code: error.response.status, 
+                            description: `It looks like the URL provided either doesn't exist or have a recipe associated.`
+                        })
+
+                    } else if (error.request) {
+
+                        // Reject the error
+                        reject({ 
+                            message: `${error.message}`, 
+                            code: 0,
+                            description: `Unable to create the connection with the URL provided, please try again with a different one!`
+                        })
+                    } else {
+
+                        // Reject the error
+                        reject({ 
+                            message: `${error.message}`, 
+                            code: 0,
+                            description: `Some internal server error occured, please try again!`
+                        })
+                    }
                 })
         })
     }
@@ -277,7 +301,7 @@ export class HelperService {
                 }
             }
 
-            if(recipe['instruction'].length == 0 || recipe['ingredient'].length == 0)
+            if (recipe['instruction'].length == 0 || recipe['ingredient'].length == 0)
                 return null
 
             // Return Recipe Object
@@ -324,7 +348,7 @@ export class HelperService {
 
                         // Find Recipe Object
                         let recipeIndex = result['@graph'].findIndex((item: any) => item['@type'] == 'Recipe')
-                        if(recipeIndex == -1)
+                        if (recipeIndex == -1)
                             recipeIndex = result['@graph'].findIndex((item: any) => item['@type'] == 'BlogPosting')
                         if (recipeIndex != -1)
                             result = result['@graph'][recipeIndex]
@@ -378,7 +402,7 @@ export class HelperService {
                         if (data == null) {
 
                             // Resolve the promise
-                            reject({
+                            resolve({
                                 message: 'Unable to fetch the Recipe, however the Raw Data has been parsed successfully!',
                                 recipe: {
                                     title: title,
@@ -408,8 +432,8 @@ export class HelperService {
 
                     else {
 
-                        // Reject the promise
-                        reject({
+                        // Resolve the promise
+                        resolve({
                             message: 'Unable to fetch the Recipe, however the Raw Data has been parsed successfully!',
                             recipe: {
                                 title: title,
@@ -419,8 +443,8 @@ export class HelperService {
                     }
                 } else {
 
-                    // Reject the promise
-                    reject({
+                    // Resolve the promise
+                    resolve({
                         message: 'Unable to fetch the Recipe, however the Raw Data has been parsed successfully!',
                         recipe: {
                             title: title,
@@ -431,8 +455,8 @@ export class HelperService {
 
             } catch (error) {
 
-                // Reject the Promise
-                reject({
+                // Resolve the Promise
+                resolve({
                     message: 'Unable to fetch the Recipe, however the Raw Data has been parsed successfully!',
                     error: error,
                     recipe: {

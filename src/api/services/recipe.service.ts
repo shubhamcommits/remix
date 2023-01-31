@@ -168,8 +168,8 @@ export class RecipeService {
                         // Reject the Promise
                         reject({
                             message: error.message,
-                            recipe: error.recipe,
-                            error: error.stack
+                            code: error.code,
+                            description: error.description
                         })
                     })
 
