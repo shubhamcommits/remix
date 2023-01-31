@@ -57,7 +57,7 @@ export class HelperService {
                         reject({ 
                             message: `${error.message}`, 
                             code: 0,
-                            description: `Some internal server error occured, please try again!`
+                            description: `Some internal server error occurred, please try again!`
                         })
                     }
                 })
