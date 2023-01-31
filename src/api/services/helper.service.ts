@@ -419,7 +419,7 @@ export class HelperService {
                         resolve({
                             message: 'Recipe has been parsed successfully!',
                             recipe: {
-                                user_id: 'e8942adc-bb5d-477f-9a0f-ec4a1e98d838',
+                                user_id: '8c3b9418-427a-44a5-8d01-31dadd811179',
                                 title: recipe.name || title,
                                 ingredients: recipe.ingredient || [],
                                 original_author: recipe.author || '',

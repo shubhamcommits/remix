@@ -1,3 +1,6 @@
+// Import Auth Model
+import { Auth } from './auth.model'
+
 // Import Recipe Model
 import { Recipe } from './recipe.model'
 
@@ -32,4 +35,4 @@ Remix.belongsTo(RemixType, {
 })
 
 // Export Models
-export { Recipe, Remix, RemixType, User }
+export { Auth, Recipe, Remix, RemixType, User }

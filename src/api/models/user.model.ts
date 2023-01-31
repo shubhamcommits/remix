@@ -15,6 +15,11 @@ User.init({
         primaryKey: true,
         allowNull: false
     },
+    active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+        allowNull: false
+    },
     name: {
         type: DataTypes.STRING,
         defaultValue: 'New User Name',
@@ -23,6 +28,7 @@ User.init({
     email: {
         type: DataTypes.STRING,
         defaultValue: 'New User Email',
+        unique: true,
         allowNull: false
     }
 }, { sequelize: db, engine: 'InnoDB' })

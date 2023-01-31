@@ -17,6 +17,7 @@ RemixType.init({
     },
     name: {
         type: DataTypes.STRING,
+        unique: true,
         defaultValue: 'New Remix Type',
         allowNull: false
     },

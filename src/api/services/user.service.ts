@@ -36,4 +36,34 @@ export class UserService {
         })
     }
 
+    /**
+     * This function fetches all the users present in the system
+     * @returns 
+     */
+    async fetchAllUsers() {
+        return new Promise(async (resolve, reject) => {
+            try {
+
+                // Fetch the list of remix types
+                User.findAll({ 
+                    raw: true,
+                    attributes: ['user_id', 'active', 'name', 'email'] 
+                })
+                    .then((data: any) => {
+
+                        // Resolve the Promise
+                        resolve(data)
+                    })
+                    .catch((error: any) => {
+
+                        // Reject the Promise
+                        reject({ message: 'Unable to fetch the Users list, please try again!', stack: error })
+                    })
+
+            } catch (error) {
+                reject({ error: error })
+            }
+        })
+    }
+
 }

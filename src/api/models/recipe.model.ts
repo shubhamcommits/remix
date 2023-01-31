@@ -1,5 +1,5 @@
 // Sequelize Module
-import { Model, DataTypes, Sequelize } from 'sequelize';
+import { Model, DataTypes } from 'sequelize'
 
 // Import Database Class
 import { db } from '../../sequelize'
