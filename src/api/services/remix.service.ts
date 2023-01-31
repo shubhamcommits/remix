@@ -38,7 +38,7 @@ export class RemixService {
                                 resolve({
                                     title: data.title,
                                     ingredients: data.ingredients,
-                                    instructions: data.ingredients
+                                    instructions: data.instructions
                                 })
                             })
                             .catch((error) => {
@@ -129,7 +129,10 @@ export class RemixService {
             try {
 
                 // Fetch the list of remix types
-                RemixType.findAll({ raw: true })
+                RemixType.findAll({ 
+                    raw: true,
+                    attributes: ['remix_type_id', 'name', 'prompt'] 
+                })
                     .then((data: any) => {
 
                         // Resolve the Promise
@@ -287,9 +290,6 @@ export class RemixService {
                         reject({ message: 'Unable to create the Remix of the Recipe, please try again!', stack: error })
                     })
 
-                // Resolve the Promise
-                resolve(remix)
-
                 // Remix Recipe From OpenAI
                 this.remixRecipe(remix_type.name, recipe.instructions)
                     .then(async (recipe_ai: any) => {
@@ -314,6 +314,9 @@ export class RemixService {
                         // Reject the Promise
                         reject({ message: 'Unable to generate the remix from OpenAI!', stack: error })
                     })
+                
+                // Resolve the Promise
+                resolve(remix)
 
             } catch (error) {
                 reject({ error: error })
@@ -361,7 +364,10 @@ export class RemixService {
             try {
 
                 // Fetch the list of remix types
-                Remix.findAll({ raw: true })
+                Remix.findAll({ 
+                    raw: true,
+                    attributes: ['remix_id', 'recipe_id', 'title', 'ingredients', 'instructions', 'remix_type'] 
+                })
                     .then((data: any) => {
 
                         // Resolve the Promise

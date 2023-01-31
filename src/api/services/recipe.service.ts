@@ -62,7 +62,10 @@ export class RecipeService {
             try {
 
                 // Fetch the list of recipes
-                Recipe.findAll({ raw: true })
+                Recipe.findAll({ 
+                    raw: true, 
+                    attributes: ['recipe_id', 'user_id', 'title', 'image', 'original_author', 'ingredients', 'instructions'] 
+                })
                     .then((res: any) => {
 
                         // Resolve the Promise
