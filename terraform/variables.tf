@@ -12,6 +12,16 @@ output "availability_zone_count" {
   value = length(data.aws_availability_zones.all.names)
 }
 
+# Fetch List of Public Subnets
+data "aws_subnet_ids" "public_subnets" {
+  vpc_id = aws_vpc.main.id
+
+  filter {
+    name   = "tag:Owner"
+    values = ["Shubham"]
+  }
+}
+
 # EC2 Default Instance Type
 variable "ec2_instance_type" {
   default     = "t2.micro"
