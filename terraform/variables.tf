@@ -8,14 +8,8 @@ variable "aws_region" {
 data "aws_availability_zones" "all" {}
 
 # Output the Value of AZs
-locals {
-  availability_zone_count = length(data.aws_availability_zones.all.names)
-}
-
-# Calculate AZs Count
-variable "availability_zone_count" {
-  description = "Number of AZs to cover in a given AWS region"
-  default = "${local.availability_zone_count}"
+output "availability_zone_count" {
+  value = length(data.aws_availability_zones.all.names)
 }
 
 # EC2 Default Instance Type
