@@ -22,6 +22,6 @@ resource "aws_route" "public_subnets_igw" {
     count = length(data.aws_availability_zones.all.names)
 
     route_table_id = aws_vpc.main.default_route_table_id
-    destination_cidr_block = "0.0.0.0/0"
+    destination_cidr_block = var.public_internet_cidr
     gateway_id = aws_internet_gateway.igw.id
 }
