@@ -36,6 +36,6 @@ variable "public_internet_cidr" {
 
 # Amazon Linux 2 AMI (HVM) - Kernel 5.10, SSD Volume Type
 variable "ec2_default_ami" {
-  default     = "ami-084237e82d7842286"
+  default     = "ami-0323c3dd2da7fb37d"
   description = "Amazon Linux 2 AMI (HVM) - Kernel 5.10, SSD Volume Type"
 }
