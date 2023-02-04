@@ -5,7 +5,9 @@ variable "aws_region" {
 }
 
 # Fetch list of all AZs present in a Region
-data "aws_availability_zones" "all" {}
+data "aws_availability_zones" "all" {
+  value = length(data.aws_availability_zones.all.names)
+}
 
 # Output the Value of AZs
 output "availability_zone_count" {
