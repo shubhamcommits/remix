@@ -11,7 +11,7 @@ resource "aws_instance" "ec2_instance" {
   ami           = var.ec2_default_ami
   instance_type = var.ec2_instance_type
   vpc_security_group_ids = [aws_security_group.sg.id]
-  subnet_id     = data.aws_subnet_ids.public_subnets.ids[count.index]
+  subnet_id     = data.aws_subnet_ids.public_subnets.ids[count.index].id
   associate_public_ip_address = true
   iam_instance_profile = aws_iam_instance_profile.instance_profile.name
 
@@ -22,7 +22,7 @@ resource "aws_instance" "ec2_instance" {
   }
 
   tags = {
-    Name = "remix-recipe-nginx-instance-${count.index}"
+    Name = "remix-recipe-nginx-instance-${count.index + 1}"
   }
 
   # Install and configure Nginx
