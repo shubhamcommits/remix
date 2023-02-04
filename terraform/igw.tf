@@ -13,7 +13,7 @@ resource "aws_internet_gateway" "igw" {
 resource "aws_route_table_association" "public_subnets_association" {
     count = length(data.aws_availability_zones.all.names)
 
-    subnet_id = aws_subnet.public_subnet[count.index].id
+    subnet_id = aws_subnet.public-subnet[count.index].id
     route_table_id = aws_vpc.main.default_route_table_id
 }
 

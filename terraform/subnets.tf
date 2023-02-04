@@ -1,5 +1,5 @@
 # Define Public Subnets
-resource "aws_subnet" "public_subnet" {
+resource "aws_subnet" "public-subnet" {
   count = length(data.aws_availability_zones.all.names)
   
   vpc_id = aws_vpc.main.id
@@ -15,7 +15,7 @@ resource "aws_subnet" "public_subnet" {
 }
 
 # Define Private Subnets
-resource "aws_subnet" "private_subnet" {
+resource "aws_subnet" "private-subnet" {
   count = length(data.aws_availability_zones.all.names)
   vpc_id = aws_vpc.main.id
   cidr_block = "10.0.${100 + count.index + 1}.0/24"
