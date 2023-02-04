@@ -1,7 +1,7 @@
 # Create an instance profile for EC2 instances
 resource "aws_iam_instance_profile" "instance_profile" {
   name = "instance_profile"
-  role = data.aws_iam_role.current.name
+  role = "role-github-oidc-terraform-states"
 }
 
 # Create the EC2 instance with 30GB storage
