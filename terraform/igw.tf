@@ -15,12 +15,6 @@ resource "aws_route_table_association" "public_subnets_association" {
 
     subnet_id = aws_subnet.public_subnet[count.index].id
     route_table_id = aws_vpc.main.default_route_table_id
-
-    tags = {
-        Name = "main-public-subnet-route-association-${count.index + 1}"
-        Environment = "Production"
-        Owner = "Shubham"
-    }
 }
 
 # Define AWS Routes to Internet Access
@@ -30,10 +24,4 @@ resource "aws_route" "public_subnets_igw" {
     route_table_id = aws_vpc.main.default_route_table_id
     destination_cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
-
-    tags = {
-        Name = "main-public-subnet-route-${count.index + 1}"
-        Environment = "Production"
-        Owner = "Shubham"
-    }
 }
