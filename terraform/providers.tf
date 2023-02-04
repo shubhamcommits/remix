@@ -1,7 +1,5 @@
 # Specify the provider and access details
-provider "aws" {
-  region = var.aws_region
-}
+provider "aws" {}
 
 # Default Backend for Configuration and Terraform States
 terraform {
