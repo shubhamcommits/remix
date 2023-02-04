@@ -6,12 +6,12 @@ resource "aws_iam_instance_profile" "instance_profile" {
 
 # Create the EC2 instance with 30GB storage
 resource "aws_instance" "ec2_instance" {
-  count = length(data.aws_subnet_ids.public_subnets.ids)
+  count = length(aws_subnet.public-subnet)
 
   ami           = var.ec2_default_ami
   instance_type = var.ec2_instance_type
   vpc_security_group_ids = [aws_security_group.sg.id]
-  subnet_id     = data.aws_subnet_ids.public_subnets.ids[count.index].id
+  subnet_id     = aws_subnet.public-subnet[count.index].id
   associate_public_ip_address = true
   iam_instance_profile = aws_iam_instance_profile.instance_profile.name
 
