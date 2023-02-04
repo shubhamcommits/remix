@@ -1,9 +1,3 @@
-# Create an instance profile for EC2 instances
-resource "aws_iam_instance_profile" "instance_profile" {
-  name = "instance_profile"
-  role = "role-github-oidc-terraform-states"
-}
-
 # Create the EC2 instance with 30GB storage
 resource "aws_instance" "ec2_instance" {
   count = length(aws_subnet.public-subnet)
@@ -13,7 +7,7 @@ resource "aws_instance" "ec2_instance" {
   vpc_security_group_ids = [aws_security_group.sg.id]
   subnet_id     = aws_subnet.public-subnet[count.index].id
   associate_public_ip_address = true
-  iam_instance_profile = aws_iam_instance_profile.instance_profile.name
+  iam_instance_profile = "role-github-oidc-terraform-states"
 
   # Add 30GB storage
   root_block_device {
