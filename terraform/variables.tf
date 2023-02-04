@@ -17,8 +17,8 @@ data "aws_subnet_ids" "public_subnets" {
   vpc_id = aws_vpc.main.id
 
   filter {
-    name   = "tag:Owner"
-    values = ["Shubham"]
+    name   = "tag:Name"
+    values = ["public*"]
   }
 }
 
@@ -32,4 +32,10 @@ variable "ec2_instance_type" {
 variable "public_internet_cidr" {
   default     = "0.0.0.0/0"
   description = "CIDR Block for Public Internet"
+}
+
+# Amazon Linux 2 AMI (HVM) - Kernel 5.10, SSD Volume Type
+variable "ec2_default_ami" {
+  default     = "ami-084237e82d7842286"
+  description = "Amazon Linux 2 AMI (HVM) - Kernel 5.10, SSD Volume Type"
 }
