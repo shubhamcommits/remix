@@ -36,7 +36,7 @@ jobs:
 
       - name: Terraform fmt
         id: fmt
-        run: terraform fmt -check
+        run: terraform -chdir=terraform fmt -check
         continue-on-error: true
 
       - name: Terraform Init
@@ -44,11 +44,15 @@ jobs:
         env:
           AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
           AWS_BUCKET_KEY_NAME: ${{ secrets.AWS_BUCKET_KEY_NAME }}
-        run: terraform init -backend-config="bucket=${AWS_BUCKET_NAME}" -backend-config="key=${AWS_BUCKET_KEY_NAME}" -backend-config="region=${AWS_REGION}"
+        run: terraform
+              -chdir=terraform init 
+              -backend-config="bucket=${AWS_BUCKET_NAME}" 
+              -backend-config="key=${AWS_BUCKET_KEY_NAME}" 
+              -backend-config="region=${AWS_REGION}"
 
       - name: Terraform Validate
         id: validate
-        run: terraform validate -no-color
+        run: terraform -chdir=terraform validate -no-color
 
       - name: Terraform Plan
         id: plan
@@ -99,4 +103,4 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-        run: terraform apply -auto-approve -input=false
+        run: terraform -chdir=terraform apply -auto-approve -input=false
