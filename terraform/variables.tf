@@ -17,3 +17,9 @@ variable "ec2_instance_type" {
   default     = "t2.micro"
   description = "AWS EC2 Instance Type"
 }
+
+# CIDR Block for Public Internet
+variable "public_internet_cidr" {
+  default     = "0.0.0.0/0"
+  description = "CIDR Block for Public Internet"
+}
