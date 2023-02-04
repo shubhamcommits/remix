@@ -22,11 +22,6 @@ data "aws_subnet_ids" "public_subnets" {
   }
 }
 
-# Get Current IAM Role
-data "aws_iam_role" "current" {
-  name = aws_iam_role.this.name
-}
-
 # EC2 Default Instance Type
 variable "ec2_instance_type" {
   default     = "t2.micro"
