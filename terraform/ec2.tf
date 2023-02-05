@@ -2,12 +2,12 @@
 resource "aws_instance" "ec2_instance" {
   count = length(aws_subnet.public-subnet)
 
-  ami           = var.ec2_default_ami
-  instance_type = var.ec2_instance_type
-  vpc_security_group_ids = [aws_security_group.sg.id]
-  subnet_id     = aws_subnet.public-subnet[count.index].id
+  ami                         = var.ec2_default_ami
+  instance_type               = var.ec2_instance_type
+  vpc_security_group_ids      = [aws_security_group.sg.id]
+  subnet_id                   = aws_subnet.public-subnet[count.index].id
   associate_public_ip_address = true
-  
+
   iam_instance_profile = aws_iam_instance_profile.ec2-instance-profile.name
 
   # Add 30GB storage
@@ -17,13 +17,13 @@ resource "aws_instance" "ec2_instance" {
   }
 
   tags = {
-    Name = "remix-recipe-nginx-instance-${count.index + 1}"
+    Name        = "remix-recipe-nginx-instance-${count.index + 1}"
     Environment = "Production"
-    Owner = "Shubham"
+    Owner       = "Shubham"
   }
 
   # Install and configure Nginx
-  user_data = "${file(terraform/scripts/define-nginx.sh)}"
+  user_data = file("scripts/define-nginx.sh")
 }
 
 # Create a security group to allow incoming traffic on port 80, 443
