@@ -23,7 +23,7 @@ resource "aws_instance" "ec2_instance" {
   }
 
   # Install and configure Nginx
-  user_data = file(scripts/define-nginx.sh)
+  user_data = file(terraform/scripts/define-nginx.sh)
 }
 
 # Create a security group to allow incoming traffic on port 80, 443
