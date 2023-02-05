@@ -15,24 +15,6 @@ resource "aws_iam_role" "role-launch-ec2" {
   })
 }
 
-# Define an IAM policy for the role
-resource "aws_iam_policy" "policy-ec2-details" {
-  name = "policy-ec2-details"
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Action = [
-          "ec2:Describe*"
-        ],
-        Effect = "Allow",
-        Resource = "*"
-      }
-    ]
-  })
-  roles = [aws_iam_role.role-launch-ec2.name]
-}
-
 # Define an IAM instance profile
 resource "aws_iam_instance_profile" "ec2-instance-profile" {
   name = "ec2_instance_profile"
