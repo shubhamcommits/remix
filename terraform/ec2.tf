@@ -7,6 +7,8 @@ resource "aws_instance" "ec2_instance" {
   vpc_security_group_ids = [aws_security_group.sg.id]
   subnet_id     = aws_subnet.public-subnet[count.index].id
   associate_public_ip_address = true
+  
+  iam_instance_profile = aws_iam_instance_profile.ec2-instance-profile.name
 
   # Add 30GB storage
   root_block_device {
@@ -16,6 +18,8 @@ resource "aws_instance" "ec2_instance" {
 
   tags = {
     Name = "remix-recipe-nginx-instance-${count.index + 1}"
+    Environment = "Production"
+    Owner = "Shubham"
   }
 
   # Install and configure Nginx
