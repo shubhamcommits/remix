@@ -2,12 +2,12 @@
 resource "aws_instance" "ec2_instance" {
   count = length(aws_subnet.public-subnet)
 
-  ami           = var.ec2_default_ami
-  instance_type = var.ec2_instance_type
-  vpc_security_group_ids = [aws_security_group.sg.id]
-  subnet_id     = aws_subnet.public-subnet[count.index].id
+  ami                         = var.ec2_default_ami
+  instance_type               = var.ec2_instance_type
+  vpc_security_group_ids      = [aws_security_group.sg.id]
+  subnet_id                   = aws_subnet.public-subnet[count.index].id
   associate_public_ip_address = true
-  
+
   iam_instance_profile = aws_iam_instance_profile.ec2-instance-profile.name
 
   # Add 30GB storage
@@ -17,24 +17,13 @@ resource "aws_instance" "ec2_instance" {
   }
 
   tags = {
-    Name = "remix-recipe-nginx-instance-${count.index + 1}"
+    Name        = "remix-recipe-nginx-instance-${count.index + 1}"
     Environment = "Production"
-    Owner = "Shubham"
+    Owner       = "Shubham"
   }
 
   # Install and configure Nginx
-  provisioner "remote-exec" {
-    inline = [
-      "sudo yum update -y",
-      "sudo amazon-linux-extras install nginx1.12",
-      "sudo systemctl start nginx",
-      "sudo systemctl enable nginx",
-      "sudo firewall-cmd --zone=public --add-port=22/tcp --permanent",
-      "sudo firewall-cmd --zone=public --add-port=80/tcp --permanent",
-      "sudo firewall-cmd --zone=public --add-port=443/tcp --permanent",
-      "sudo firewall-cmd --reload"
-    ]
-  }
+  user_data = file("scripts/define-nginx.sh")
 }
 
 # Create a security group to allow incoming traffic on port 80, 443
