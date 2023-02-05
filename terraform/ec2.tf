@@ -70,18 +70,18 @@ resource "aws_security_group" "sg" {
 }
 
 # Network Interface for EC2 Instance
-resource "aws_network_interface" "ani" {
-  count = length(aws_subnet.public-subnet)
-  subnet_id = aws_subnet.public-subnet[count.index].id
-  security_groups = [aws_security_group.sg.id]
+# resource "aws_network_interface" "ani" {
+#   count = length(aws_subnet.public-subnet)
+#   subnet_id = aws_subnet.public-subnet[count.index].id
+#   security_groups = [aws_security_group.sg.id]
 
-  private_ips = ["10.0.${count.index}.10"]
-}
+#   private_ips = ["10.0.${count.index}.10"]
+# }
 
 # Attach Network Interface to EC2 Instance
-resource "aws_instance_network_interface_attachment" "network_attachment" {
-  count = length(aws_subnet.public-subnet)
-  instance_id = aws_instance.ec2_instance[count.index].id
-  network_interface_id = aws_network_interface.ani[count.index].id
-  device_index = 0
-}
+# resource "aws_instance_network_interface_attachment" "network_attachment" {
+#   count = length(aws_subnet.public-subnet)
+#   instance_id = aws_instance.ec2_instance[count.index].id
+#   network_interface_id = aws_network_interface.ani[count.index].id
+#   device_index = 0
+# }
