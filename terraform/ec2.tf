@@ -26,6 +26,13 @@ resource "aws_instance" "ec2_instance" {
   user_data = file("scripts/define-nginx.sh")
 }
 
+# Create the Elastic IP Address
+resource "aws_eip" "eip" {
+  count = length(aws_instance.ec2_instance)
+  vpc = true
+  instance = aws_instance.ec2_instance[count.index].id
+}
+
 # Create a security group to allow incoming traffic on port 80, 443
 resource "aws_security_group" "sg" {
   name        = "remix-recipe-nginx-security-group"
