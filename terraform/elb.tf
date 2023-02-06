@@ -1,7 +1,8 @@
 resource "aws_elb" "elb" {
   depends_on = [
     aws_security_group.sg,
-    data.aws_availability_zones.all
+    data.aws_availability_zones.all,
+    aws_instance.ec2_instance
   ]
   name               = "remix-recipe-server-elb"
   internal           = false
@@ -22,6 +23,8 @@ resource "aws_elb" "elb" {
     unhealthy_threshold = 5
     timeout             = 3
   }
+
+  instances = aws_instance.ec2_instance[*].id
 
   tags = {
     Name        = "remix-recipe-server-elb",
@@ -50,7 +53,7 @@ resource "aws_autoscaling_group" "asg" {
   availability_zones        = data.aws_availability_zones.all.names
   max_size                  = 10
   min_size                  = 1
-  desired_capacity          = 2
+  desired_capacity          = 1
   health_check_grace_period = 300
 
   tag {
@@ -71,6 +74,9 @@ resource "aws_autoscaling_attachment" "asg_elb" {
 
 # Create the EC2 instance with 30GB storage
 resource "aws_instance" "ec2_instance" {
+  
+  count = 2
+
   depends_on = [
     var.ec2_default_ami,
     var.ec2_instance_type,
@@ -93,7 +99,7 @@ resource "aws_instance" "ec2_instance" {
   }
 
   tags = {
-    Name        = "remix-recipe-prod-instance"
+    Name        = "remix-recipe-prod-instance-${count.index + 1}"
     Environment = "Production"
     Owner       = "Shubham"
   }
