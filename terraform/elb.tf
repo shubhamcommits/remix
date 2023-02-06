@@ -31,13 +31,21 @@ resource "aws_elb" "elb" {
 }
 
 resource "aws_launch_configuration" "alc" {
+  depends_on = [
+    var.ec2_default_ami,
+    var.ec2_instance_type,
+    aws_security_group.sg
+  ]
   image_id        = var.ec2_default_ami
   instance_type   = var.ec2_instance_type
   security_groups = [aws_security_group.sg.id]
 }
 
 resource "aws_autoscaling_group" "asg" {
-
+  depends_on = [
+    aws_launch_configuration.alc,
+    data.aws_availability_zones.all
+  ]
   launch_configuration      = aws_launch_configuration.alc.name
   availability_zones        = data.aws_availability_zones.all.names
   max_size                  = 10
@@ -53,12 +61,23 @@ resource "aws_autoscaling_group" "asg" {
 }
 
 resource "aws_autoscaling_attachment" "asg_elb" {
+  depends_on = [
+    aws_autoscaling_group.asg,
+    aws_elb.elb
+  ]
   autoscaling_group_name = aws_autoscaling_group.asg.name
   elb                    = aws_elb.elb.name
 }
 
 # Create the EC2 instance with 30GB storage
 resource "aws_instance" "ec2_instance" {
+  depends_on = [
+    var.ec2_default_ami,
+    var.ec2_instance_type,
+    aws_security_group.sg,
+    aws_subnet.private-subnet,
+    aws_iam_instance_profile.ec2-instance-profile
+  ]
   ami                         = var.ec2_default_ami
   instance_type               = var.ec2_instance_type
   vpc_security_group_ids      = [aws_security_group.sg.id]

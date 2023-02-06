@@ -35,6 +35,10 @@
 
 # Create a security group to allow incoming traffic on port 80, 443
 resource "aws_security_group" "sg" {
+  depends_on = [
+    aws_vpc.main
+  ]
+
   name        = "remix-recipe-nginx-security-group"
   description = "Allow HTTP and HTTPS traffic"
 
