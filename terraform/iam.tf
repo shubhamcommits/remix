@@ -21,6 +21,6 @@ resource "aws_iam_instance_profile" "ec2-instance-profile" {
     aws_iam_role.role-launch-ec2
   ]
 
-  name = "ec2_instance_profile"
+  name = "remix-recipe-ec2-instance-profile"
   role = aws_iam_role.role-launch-ec2.name
 }

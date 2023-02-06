@@ -7,7 +7,7 @@ resource "aws_elb" "elb" {
   name               = "remix-recipe-server-elb"
   internal           = false
   security_groups    = [aws_security_group.sg.id]
-  availability_zones = data.aws_availability_zones.all.names
+  subnets = aws_subnet.private-subnet.*.id
 
   listener {
     instance_port     = 80
@@ -25,6 +25,7 @@ resource "aws_elb" "elb" {
   }
 
   instances = aws_instance.ec2_instance[*].id
+  cross_zone_load_balancing   = true
 
   tags = {
     Name        = "remix-recipe-server-elb",
@@ -39,6 +40,7 @@ resource "aws_launch_configuration" "alc" {
     var.ec2_instance_type,
     aws_security_group.sg
   ]
+  name = "remix-recipe-prod-lc"
   image_id        = var.ec2_default_ami
   instance_type   = var.ec2_instance_type
   security_groups = [aws_security_group.sg.id]
@@ -49,6 +51,7 @@ resource "aws_autoscaling_group" "asg" {
     aws_launch_configuration.alc,
     data.aws_availability_zones.all
   ]
+  name = "remix-recipe-prod-asg"
   launch_configuration      = aws_launch_configuration.alc.name
   availability_zones        = data.aws_availability_zones.all.names
   max_size                  = 10
