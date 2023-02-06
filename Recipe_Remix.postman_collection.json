@@ -11,12 +11,15 @@
 			"item": [
 				{
 					"name": "Login",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"development.shubhamsingh@gmail.com\",\n    \"password\": \"123\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -24,19 +27,40 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_API_URL}}/auths/login",
+							"raw": "{{BASE_URL}}/auths/login",
 							"host": [
-								"{{BASE_API_URL}}"
+								"{{BASE_URL}}"
 							],
 							"path": [
 								"auths",
 								"login"
 							]
-						}
+						},
+						"description": "This is the base auth0 login route, which redirects the user back to base_url in case of success"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/auths/logout",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auths",
+								"logout"
+							]
+						},
+						"description": "This is the base auth0 logout route, which redirects the user back to base_url in case of success"
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "This folder contains all the details to auth routes."
 		},
 		{
 			"name": "Recipes",
@@ -55,7 +79,8 @@
 								"recipes",
 								""
 							]
-						}
+						},
+						"description": "This route fetches all the recipes stored in our server"
 					},
 					"response": []
 				},
@@ -84,7 +109,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"url\": \"https://www.vegrecipesofindia.com/shahi-paneer/\"\n}",
+							"raw": "{\n    \"url\": \"https://www.allrecipes.com/recipe/143052/sweet-and-spicy-turkey-sandwich/\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -111,7 +136,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"url\": \"https://www.vegrecipesofindia.com/shahi-paneer/\"\n}",
+							"raw": "{\n    \"url\": \"https://www.foodnetwork.com/recipes/blood-orange-whole-wheat-ricotta-pancakes-3415397\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -146,13 +171,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_API_URL}}/recipes/a9f60a26-68f2-4983-b7b4-a1dcef8e8589",
+							"raw": "{{BASE_API_URL}}/recipes/cf9aaaa2-08bd-49e6-a1aa-35602fbb337e",
 							"host": [
 								"{{BASE_API_URL}}"
 							],
 							"path": [
 								"recipes",
-								"a9f60a26-68f2-4983-b7b4-a1dcef8e8589"
+								"cf9aaaa2-08bd-49e6-a1aa-35602fbb337e"
 							]
 						}
 					},
@@ -185,7 +210,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "This folder contains all the details to recipe routes."
 		},
 		{
 			"name": "Remixes",
@@ -217,13 +243,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_API_URL}}/remixes/d5701271-c341-4b78-b413-cc14780e28de",
+									"raw": "{{BASE_API_URL}}/remixes/0e5f54b5-74fe-4989-9e09-cbb075542257",
 									"host": [
 										"{{BASE_API_URL}}"
 									],
 									"path": [
 										"remixes",
-										"d5701271-c341-4b78-b413-cc14780e28de"
+										"0e5f54b5-74fe-4989-9e09-cbb075542257"
 									]
 								}
 							},
@@ -271,13 +297,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{BASE_API_URL}}/remixes/a9f60a26-68f2-4983-b7b4-a1dcef8e8589",
+									"raw": "{{BASE_API_URL}}/remixes/ce9cb4f9-f97a-47e5-af6a-c73190afc4c9",
 									"host": [
 										"{{BASE_API_URL}}"
 									],
 									"path": [
 										"remixes",
-										"a9f60a26-68f2-4983-b7b4-a1dcef8e8589"
+										"ce9cb4f9-f97a-47e5-af6a-c73190afc4c9"
 									]
 								}
 							},
@@ -317,7 +343,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"remix_type_name\": \"dairy-free\",\n    \"instructions\": [\n        \"Heat 1 tablespoon oil in a large saucepan over medium-high heat. Add onion and garlic. Cook, stirring, for 3 minutes until onion is soft. Add rice. Stir to coat in mixture. Add stock, 1 teaspoon curry powder, 2 teaspoons cumin and chickpeas. Stir to combine. Cover. Reduce heat to medium-low. Cook for 12 to 15 minutes or until the liquid is absorbed. Remove from heat. Set aside for 10 minutes. Fluff rice with a fork to separate grains.\",\n        \"Meanwhile, heat 1 tablespoon of remaining oil in a large non-stick frying pan over high heat. Add lamb. Sprinkle with remaining curry powder and cumin. Season with salt and pepper. Cook for 2 minutes, stirring once, until the lamb is browned and heated through. Transfer to a large bowl.\",\n        \"Add rice mixture, currants, coriander, parsley, lemon juice and remaining oil to the lamb. Toss gently to combine. Season with salt and pepper. Serve sprinkled with pomegranate seeds.\"\n    ]\n}",
+									"raw": "{\n    \"remix_type_name\": \"gluten-free\",\n    \"instructions\": [\n            \"Heat a small skillet over medium heat. Butter one side of each of the bread slices with one teaspoon butter. Place one slice, butter side down, in the skillet. Top with the turkey and cheese slices. Place the second slice of bread on top, butter side up.\",\n            \"When the first side of the sandwich is golden brown, turn and brown the other side, 3 to 5 minutes per side, or until the cheese begins to melt.\",\n            \"Remove sandwich to a plate and top with strawberry preserves, or serve the preserves on the side.\"\n        ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -366,14 +392,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_API_URL}}/remixes/types/0c30c832-e30e-4f4a-89e7-cbad7d151e6a",
+									"raw": "{{BASE_API_URL}}/remixes/types/d89a0024-3c2e-4885-bf01-9de076c654d7",
 									"host": [
 										"{{BASE_API_URL}}"
 									],
 									"path": [
 										"remixes",
 										"types",
-										"0c30c832-e30e-4f4a-89e7-cbad7d151e6a"
+										"d89a0024-3c2e-4885-bf01-9de076c654d7"
 									]
 								}
 							},
@@ -386,7 +412,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"dairy-free\",\n    \"prompt\": \"Dairy Free Remix Type\"\n}",
+									"raw": "{\n    \"name\": \"keto\",\n    \"prompt\": \"Keto Remix Type\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -449,13 +475,14 @@
 									}
 								},
 								"url": {
-									"raw": "{{BASE_API_URL}}/remixes/a9f60a26-68f2-4983-b7b4-a1dcef8e8589",
+									"raw": "{{BASE_API_URL}}/remixes/types/67a0979d-5f06-4bbf-8749-b630fdf6ed7f",
 									"host": [
 										"{{BASE_API_URL}}"
 									],
 									"path": [
 										"remixes",
-										"a9f60a26-68f2-4983-b7b4-a1dcef8e8589"
+										"types",
+										"67a0979d-5f06-4bbf-8749-b630fdf6ed7f"
 									]
 								}
 							},
@@ -482,6 +509,24 @@
 								}
 							}
 						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/users/",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
 						"url": {
 							"raw": "{{BASE_API_URL}}/users/",
 							"host": [
@@ -550,7 +595,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": ""
+						"value": "Bearer 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"
 					}
 				],
 				"body": {
@@ -568,6 +613,20 @@
 					"path": [
 						"v1",
 						"completions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}",
+					"host": [
+						"{{BASE_URL}}"
 					]
 				}
 			},
