@@ -6,6 +6,7 @@ resource "aws_subnet" "public-subnet" {
   cidr_block              = "10.0.${count.index + 1}.0/24"
   availability_zone       = data.aws_availability_zones.all.names[count.index]
   map_public_ip_on_launch = true
+  assign_public_ip        = true
 
   tags = {
     Name        = "public-subnet-az-${count.index + 1}"
