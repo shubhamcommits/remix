@@ -1,30 +1,30 @@
 # Create the EC2 instance with 30GB storage
-resource "aws_instance" "ec2_instance" {
-  count = length(aws_subnet.public-subnet)
+# resource "aws_instance" "ec2_instance" {
+#   count = length(aws_subnet.public-subnet)
 
-  ami                         = var.ec2_default_ami
-  instance_type               = var.ec2_instance_type
-  vpc_security_group_ids      = [aws_security_group.sg.id]
-  subnet_id                   = aws_subnet.public-subnet[count.index].id
-  associate_public_ip_address = true
+#   ami                         = var.ec2_default_ami
+#   instance_type               = var.ec2_instance_type
+#   vpc_security_group_ids      = [aws_security_group.sg.id]
+#   subnet_id                   = aws_subnet.public-subnet[count.index].id
+#   associate_public_ip_address = true
 
-  iam_instance_profile = aws_iam_instance_profile.ec2-instance-profile.name
+#   iam_instance_profile = aws_iam_instance_profile.ec2-instance-profile.name
 
-  # Add 30GB storage
-  root_block_device {
-    volume_size = 30
-    volume_type = "gp2"
-  }
+#   # Add 30GB storage
+#   root_block_device {
+#     volume_size = 30
+#     volume_type = "gp2"
+#   }
 
-  tags = {
-    Name        = "remix-recipe-nginx-instance-${count.index + 1}"
-    Environment = "Production"
-    Owner       = "Shubham"
-  }
+#   tags = {
+#     Name        = "remix-recipe-nginx-instance-${count.index + 1}"
+#     Environment = "Production"
+#     Owner       = "Shubham"
+#   }
 
-  # Install and configure Nginx
-  user_data = file("scripts/define-nginx.sh")
-}
+#   # Install and configure Nginx
+#   user_data = file("scripts/define-nginx.sh")
+# }
 
 # Create the Elastic IP Address
 # resource "aws_eip" "eip" {
