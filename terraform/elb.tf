@@ -19,7 +19,7 @@ resource "aws_elb" "elb" {
   health_check {
     target              = "HTTP:80/"
     interval            = 30
-    healthy_threshold   = 3
+    healthy_threshold   = 2
     unhealthy_threshold = 5
     timeout             = 3
   }
@@ -53,7 +53,7 @@ resource "aws_autoscaling_group" "asg" {
   availability_zones        = data.aws_availability_zones.all.names
   max_size                  = 10
   min_size                  = 1
-  desired_capacity          = 1
+  desired_capacity          = 2
   health_check_grace_period = 300
 
   tag {
