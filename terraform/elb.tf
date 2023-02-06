@@ -7,7 +7,7 @@ resource "aws_elb" "elb" {
   name            = "remix-recipe-server-elb"
   internal        = false
   security_groups = [aws_security_group.sg.id]
-  subnets         = aws_subnet.private-subnet.*.id
+  subnets         = aws_subnet.public-subnet.*.id
 
   listener {
     instance_port     = 80
@@ -53,11 +53,12 @@ resource "aws_autoscaling_group" "asg" {
   ]
   name                      = "remix-recipe-prod-asg"
   launch_configuration      = aws_launch_configuration.alc.name
-  vpc_zone_identifier       = aws_subnet.private-subnet.*.id
+  vpc_zone_identifier       = aws_subnet.public-subnet.*.id
   max_size                  = 10
   min_size                  = 1
   desired_capacity          = 2
   health_check_grace_period = 300
+
 
   tag {
     key                 = "Name"
@@ -85,12 +86,13 @@ resource "aws_instance" "ec2_instance" {
     var.ec2_instance_type,
     aws_security_group.sg,
     aws_subnet.private-subnet,
+    aws_subnet.public-subnet,
     aws_iam_instance_profile.ec2-instance-profile
   ]
   ami                         = var.ec2_default_ami
   instance_type               = var.ec2_instance_type
   vpc_security_group_ids      = [aws_security_group.sg.id]
-  subnet_id                   = aws_subnet.private-subnet[0].id
+  subnet_id                   = aws_subnet.public-subnet[0].id
   associate_public_ip_address = false
 
   iam_instance_profile = aws_iam_instance_profile.ec2-instance-profile.name
