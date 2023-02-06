@@ -102,15 +102,32 @@ const isLoggedIn = async (req: any, res: Response, next: NextFunction) => {
     }
 }
 
-const loginToAuth0 = async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * This function is responsible for checking if the current user is loggedIn from auth0 or not
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
+const isloggedInToAuth0 = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-    } catch (err) {
+        if (req.oidc.isAuthenticated()) {
+            next()
 
+        } else {
+            return res.status(401).json({
+                message: 'Unauthorized request, it must be authenticated through /login first!'
+            })
+        }
+
+    } catch (err) {
+        return SendError(res, err, 'Unauthorized request, Please sign in to continue!', 401)
     }
 }
 
 export {
     verifyAccessToken,
-    isLoggedIn
+    isLoggedIn,
+    isloggedInToAuth0
 }

@@ -4,6 +4,9 @@ import { Router } from 'express'
 // Import Remix Controllers
 import { RemixController } from '../controllers'
 
+// Import Auth from Utils
+import { isloggedInToAuth0 } from '../../utils/auth'
+
 // Auth Module from Auth0
 import { requiresAuth } from 'express-openid-connect'
 
@@ -14,46 +17,46 @@ const remixControllers = new RemixController()
 export const RemixRoutes = Router()
 
 // Route Definition
-RemixRoutes.post('/generate', requiresAuth(), remixControllers.remixRecipe)
+RemixRoutes.post('/generate',isloggedInToAuth0, requiresAuth(), remixControllers.remixRecipe)
 
 // Route Definition
 RemixRoutes.route('/types')
 
     // Fetch all Remix Types
-    .get(requiresAuth(), remixControllers.fetchAllRemixTypes)
+    .get(isloggedInToAuth0, requiresAuth(), remixControllers.fetchAllRemixTypes)
 
     // Create new Remix Type
-    .post(requiresAuth(), remixControllers.createRemixType)
+    .post(isloggedInToAuth0, requiresAuth(), remixControllers.createRemixType)
 
 // Route Definition
 RemixRoutes.route('/types/:id')
 
     // Fetch Remix Type by ID
-    .get(requiresAuth(), remixControllers.fetchRemixType)
+    .get(isloggedInToAuth0, requiresAuth(), remixControllers.fetchRemixType)
 
     // Update Remix Type by ID
-    .put(requiresAuth(), remixControllers.updateRemixType)
+    .put(isloggedInToAuth0, requiresAuth(), remixControllers.updateRemixType)
 
     // Delete Remix Type by ID
-    .delete(requiresAuth(), remixControllers.removeRemixType)
+    .delete(isloggedInToAuth0, requiresAuth(), remixControllers.removeRemixType)
 
 // Route Definition
 RemixRoutes.route('/')
 
     // Fetch all Remixed Recipes
-    .get(requiresAuth(), remixControllers.fetchAllRemixedRecipes)
+    .get(isloggedInToAuth0, requiresAuth(), remixControllers.fetchAllRemixedRecipes)
 
     // Create new Remixed Recipe
-    .post(requiresAuth(), remixControllers.createRemixedRecipe)
+    .post(isloggedInToAuth0, requiresAuth(), remixControllers.createRemixedRecipe)
 
 // Route Definition
 RemixRoutes.route('/:id')
 
     // Fetch Remixed Recipe by ID
-    .get(requiresAuth(), remixControllers.fetchRemixedRecipe)
+    .get(isloggedInToAuth0, requiresAuth(), remixControllers.fetchRemixedRecipe)
 
     // Update Remixed Recipe by ID
-    .put(requiresAuth(), remixControllers.updateRemixedRecipe)
+    .put(isloggedInToAuth0, requiresAuth(), remixControllers.updateRemixedRecipe)
 
     // Delete Remixed Recipe by ID
-    .delete(requiresAuth(), remixControllers.removeRemixedRecipe)
+    .delete(isloggedInToAuth0, requiresAuth(), remixControllers.removeRemixedRecipe)
