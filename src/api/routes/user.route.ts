@@ -7,6 +7,9 @@ import { UserController } from '../controllers'
 // Auth Module from Auth0
 import { requiresAuth } from 'express-openid-connect'
 
+// Import Auth from Utils
+import { isloggedInToAuth0 } from '../../utils/auth'
+
 // Instantiate Controller
 const userControllers = new UserController()
 
@@ -17,7 +20,7 @@ export const UserRoutes = Router()
 UserRoutes.route('/')
 
     // GET - Fetch all Users
-    .get(requiresAuth(), userControllers.fetchAllUsers)
+    .get(isloggedInToAuth0, requiresAuth(), userControllers.fetchAllUsers)
 
     // POST - Create User Route Definition
-    .post(requiresAuth(), userControllers.createUser)
+    .post(isloggedInToAuth0, requiresAuth(), userControllers.createUser)
