@@ -1,11 +1,11 @@
 resource "aws_elb" "elb" {
   depends_on = [
     aws_security_group.sg,
-    data.aws_availability_zones.all.names
+    data.aws_availability_zones.all
   ]
   name               = "remix-recipe-server-elb"
   internal           = false
-  security_groups    = [aws_security_group.sg]
+  security_groups    = [aws_security_group.sg.id]
   availability_zones = data.aws_availability_zones.all.names
 
   listener {
@@ -31,9 +31,9 @@ resource "aws_elb" "elb" {
 }
 
 resource "aws_launch_configuration" "alc" {
-  image_id      = var.ec2_default_ami
-  instance_type = var.ec2_instance_type
-  security_groups = [ aws_security_group.sg ]
+  image_id        = var.ec2_default_ami
+  instance_type   = var.ec2_instance_type
+  security_groups = [aws_security_group.sg.id]
 }
 
 resource "aws_autoscaling_group" "asg" {
@@ -44,8 +44,6 @@ resource "aws_autoscaling_group" "asg" {
   min_size                  = 1
   desired_capacity          = 2
   health_check_grace_period = 300
-  subnet_ids                = aws_subnet.private-subnet[*].id
-  vpc_zone_identifier       = [aws_subnet.private-subnet.*.id]
 
   tag {
     key                 = "Name"
@@ -55,8 +53,8 @@ resource "aws_autoscaling_group" "asg" {
 }
 
 resource "aws_autoscaling_attachment" "asg_elb" {
-  autoscaling_group_name  = aws_autoscaling_group.asg.name
-  elb                     = aws_elb.elb.name
+  autoscaling_group_name = aws_autoscaling_group.asg.name
+  elb                    = aws_elb.elb.name
 }
 
 # Create the EC2 instance with 30GB storage
@@ -68,8 +66,6 @@ resource "aws_instance" "ec2_instance" {
   associate_public_ip_address = false
 
   iam_instance_profile = aws_iam_instance_profile.ec2-instance-profile.name
-
-  vpc_zone_identifier = [aws_subnet.private-subnet.*.id]
 
   # Add 30GB storage
   root_block_device {
