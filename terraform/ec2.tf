@@ -39,7 +39,7 @@ resource "aws_security_group" "sg" {
     aws_vpc.main
   ]
 
-  name        = "remix-recipe-nginx-security-group"
+  name        = "remix-recipe-security-group"
   description = "Allow HTTP and HTTPS traffic"
 
   vpc_id = aws_vpc.main.id
