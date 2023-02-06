@@ -4,10 +4,10 @@ resource "aws_elb" "elb" {
     data.aws_availability_zones.all,
     aws_instance.ec2_instance
   ]
-  name               = "remix-recipe-server-elb"
-  internal           = false
-  security_groups    = [aws_security_group.sg.id]
-  subnets = aws_subnet.private-subnet.*.id
+  name            = "remix-recipe-server-elb"
+  internal        = false
+  security_groups = [aws_security_group.sg.id]
+  subnets         = aws_subnet.private-subnet.*.id
 
   listener {
     instance_port     = 80
@@ -24,8 +24,8 @@ resource "aws_elb" "elb" {
     timeout             = 3
   }
 
-  instances = aws_instance.ec2_instance[*].id
-  cross_zone_load_balancing   = true
+  instances                 = aws_instance.ec2_instance[*].id
+  cross_zone_load_balancing = true
 
   tags = {
     Name        = "remix-recipe-server-elb",
@@ -40,7 +40,7 @@ resource "aws_launch_configuration" "alc" {
     var.ec2_instance_type,
     aws_security_group.sg
   ]
-  name = "remix-recipe-prod-lc"
+  name            = "remix-recipe-prod-lc"
   image_id        = var.ec2_default_ami
   instance_type   = var.ec2_instance_type
   security_groups = [aws_security_group.sg.id]
@@ -51,9 +51,9 @@ resource "aws_autoscaling_group" "asg" {
     aws_launch_configuration.alc,
     data.aws_availability_zones.all
   ]
-  name = "remix-recipe-prod-asg"
+  name                      = "remix-recipe-prod-asg"
   launch_configuration      = aws_launch_configuration.alc.name
-  availability_zones        = data.aws_availability_zones.all.names
+  vpc_zone_identifier       = aws_subnet.private-subnet.*.id
   max_size                  = 10
   min_size                  = 1
   desired_capacity          = 2
@@ -77,7 +77,7 @@ resource "aws_autoscaling_attachment" "asg_elb" {
 
 # Create the EC2 instance with 30GB storage
 resource "aws_instance" "ec2_instance" {
-  
+
   count = 2
 
   depends_on = [
