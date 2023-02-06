@@ -4,6 +4,9 @@ import { Router } from 'express'
 // Import Recipe Controllers
 import { RecipeController } from '../controllers'
 
+// Auth Module from Auth0
+import { requiresAuth } from 'express-openid-connect'
+
 // Instantiate Controller
 const recipeControllers = new RecipeController()
 
@@ -11,25 +14,25 @@ const recipeControllers = new RecipeController()
 export const RecipeRoutes = Router()
 
 // POST - Extract Recipe Details
-RecipeRoutes.post('/extract', recipeControllers.extractRawRecipe)
+RecipeRoutes.post('/extract', requiresAuth(), recipeControllers.extractRawRecipe)
 
 // POST - Parse Recipe
-RecipeRoutes.post('/parse', recipeControllers.parseRecipe)
+RecipeRoutes.post('/parse', requiresAuth(), recipeControllers.parseRecipe)
 
 // Route Definition
 RecipeRoutes.route('/')
 
     // Fetch all Recipes
-    .get(recipeControllers.fetchAllRecipes)
+    .get(requiresAuth(), recipeControllers.fetchAllRecipes)
 
     // Create new Recipe
-    .post(recipeControllers.createRecipe)
+    .post(requiresAuth(), recipeControllers.createRecipe)
 
 // Route Definition
 RecipeRoutes.route('/:id')
 
     // Fetch the Recipe by ID 
-    .get(recipeControllers.fetchRecipe)
+    .get(requiresAuth(), recipeControllers.fetchRecipe)
 
     // Remove the Recipe
-    .delete(recipeControllers.removeRecipe)
+    .delete(requiresAuth(), recipeControllers.removeRecipe)

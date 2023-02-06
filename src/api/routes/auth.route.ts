@@ -11,4 +11,4 @@ const authControllers = new AuthController()
 export const AuthRoutes = Router()
 
 // POST - Login Route Definition
-AuthRoutes.post('/login', authControllers.login)
+// AuthRoutes.get('/login', authControllers.login)
