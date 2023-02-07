@@ -1,15 +1,19 @@
+# Create an elb for our instances
 resource "aws_elb" "elb" {
   depends_on = [
+    var.elb_name,
+    var.environment_name,
+    var.owner_name,
     aws_security_group.sg,
     data.aws_availability_zones.all
   ]
-  name            = "remix-recipe-server-elb"
+  name            = var.elb_name
   internal        = false
   security_groups = [aws_security_group.sg.id]
   subnets         = aws_subnet.public-subnet.*.id
 
   listener {
-    instance_port     = 80
+    instance_port     = 3000
     instance_protocol = "http"
     lb_port           = 80
     lb_protocol       = "http"
@@ -26,65 +30,10 @@ resource "aws_elb" "elb" {
   cross_zone_load_balancing = true
 
   tags = {
-    Name        = "remix-recipe-server-elb",
-    Environment = "Production"
-    Owner       = "Shubham"
+    Name        = var.elb_name
+    Environment = var.environment_name
+    Owner       = var.owner_name
   }
-}
-
-resource "aws_launch_configuration" "alc" {
-  depends_on = [
-    var.ec2_default_ami,
-    var.ec2_instance_type,
-    aws_security_group.sg
-  ]
-  name            = "remix-recipe-prod-lc"
-  image_id        = var.ec2_default_ami
-  instance_type   = var.ec2_instance_type
-  security_groups = [aws_security_group.sg.id]
-
-  # Install and configure Nginx
-  user_data = file("scripts/define-nginx.sh")
-
-  associate_public_ip_address = true
-
-  # Add 30GB storage
-  root_block_device {
-    volume_size = 30
-    volume_type = "gp2"
-  }
-
-  iam_instance_profile = aws_iam_instance_profile.ec2-instance-profile.name
-}
-
-resource "aws_autoscaling_group" "asg" {
-  depends_on = [
-    aws_launch_configuration.alc,
-    data.aws_availability_zones.all
-  ]
-  name                      = "remix-recipe-prod-asg"
-  launch_configuration      = aws_launch_configuration.alc.name
-  vpc_zone_identifier       = aws_subnet.public-subnet.*.id
-  max_size                  = 10
-  min_size                  = 1
-  desired_capacity          = 2
-  health_check_grace_period = 300
-  force_delete              = true
-
-  tag {
-    key                 = "Name"
-    value               = "remix-recipe-server-asg"
-    propagate_at_launch = true
-  }
-}
-
-resource "aws_autoscaling_attachment" "asg_elb" {
-  depends_on = [
-    aws_autoscaling_group.asg,
-    aws_elb.elb
-  ]
-  autoscaling_group_name = aws_autoscaling_group.asg.name
-  elb                    = aws_elb.elb.name
 }
 
 # Create the EC2 instance with 30GB storage
