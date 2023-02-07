@@ -1,8 +1,7 @@
 resource "aws_elb" "elb" {
   depends_on = [
     aws_security_group.sg,
-    data.aws_availability_zones.all,
-    aws_instance.ec2_instance
+    data.aws_availability_zones.all
   ]
   name            = "remix-recipe-server-elb"
   internal        = false
