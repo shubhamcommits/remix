@@ -20,10 +20,10 @@ nvm install 16
 sudo npm install -g pm2
 
 # Setup Directory
-mkdir /apps
+mkdir $PWD/apps
 
 # Change Directory
-cd /apps
+cd $PWD/apps
 
 # Setup Code
 git clone https://github.com/shubhamcommits/remix.git
