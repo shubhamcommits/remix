@@ -1,15 +1,18 @@
 # Define Internet Gateway
 resource "aws_internet_gateway" "igw" {
   depends_on = [
-    aws_vpc.main
+    aws_vpc.main,
+    var.owner_name,
+    var.environment_name,
+    var.internet_gateway_name
   ]
 
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name        = "main-internet-gateway"
-    Environment = "Production"
-    Owner       = "Shubham"
+    Name        = var.internet_gateway_name
+    Environment = var.environment_name
+    Owner       = var.owner_name
   }
 }
 
