@@ -1,8 +1,7 @@
 resource "aws_elb" "elb" {
   depends_on = [
     aws_security_group.sg,
-    data.aws_availability_zones.all,
-    aws_instance.ec2_instance
+    data.aws_availability_zones.all
   ]
   name            = "remix-recipe-server-elb"
   internal        = false
@@ -24,7 +23,6 @@ resource "aws_elb" "elb" {
     timeout             = 3
   }
 
-  instances                 = aws_instance.ec2_instance[*].id
   cross_zone_load_balancing = true
 
   tags = {
@@ -44,6 +42,19 @@ resource "aws_launch_configuration" "alc" {
   image_id        = var.ec2_default_ami
   instance_type   = var.ec2_instance_type
   security_groups = [aws_security_group.sg.id]
+
+  # Install and configure Nginx
+  user_data = file("scripts/define-nginx.sh")
+
+  associate_public_ip_address = true
+
+  # Add 30GB storage
+  root_block_device {
+    volume_size = 30
+    volume_type = "gp2"
+  }
+
+  iam_instance_profile = aws_iam_instance_profile.ec2-instance-profile.name
 }
 
 resource "aws_autoscaling_group" "asg" {
@@ -58,7 +69,7 @@ resource "aws_autoscaling_group" "asg" {
   min_size                  = 1
   desired_capacity          = 2
   health_check_grace_period = 300
-
+  force_delete              = true
 
   tag {
     key                 = "Name"
@@ -77,38 +88,38 @@ resource "aws_autoscaling_attachment" "asg_elb" {
 }
 
 # Create the EC2 instance with 30GB storage
-resource "aws_instance" "ec2_instance" {
+# resource "aws_instance" "ec2_instance" {
 
-  count = 2
+#   count = 2
 
-  depends_on = [
-    var.ec2_default_ami,
-    var.ec2_instance_type,
-    aws_security_group.sg,
-    aws_subnet.private-subnet,
-    aws_subnet.public-subnet,
-    aws_iam_instance_profile.ec2-instance-profile
-  ]
-  ami                         = var.ec2_default_ami
-  instance_type               = var.ec2_instance_type
-  vpc_security_group_ids      = [aws_security_group.sg.id]
-  subnet_id                   = aws_subnet.public-subnet[0].id
-  associate_public_ip_address = false
+#   depends_on = [
+#     var.ec2_default_ami,
+#     var.ec2_instance_type,
+#     aws_security_group.sg,
+#     aws_subnet.private-subnet,
+#     aws_subnet.public-subnet,
+#     aws_iam_instance_profile.ec2-instance-profile
+#   ]
+#   ami                         = var.ec2_default_ami
+#   instance_type               = var.ec2_instance_type
+#   vpc_security_group_ids      = [aws_security_group.sg.id]
+#   subnet_id                   = aws_subnet.public-subnet[0].id
+#   associate_public_ip_address = true
 
-  iam_instance_profile = aws_iam_instance_profile.ec2-instance-profile.name
+#   iam_instance_profile = aws_iam_instance_profile.ec2-instance-profile.name
 
-  # Add 30GB storage
-  root_block_device {
-    volume_size = 30
-    volume_type = "gp2"
-  }
+#   # Add 30GB storage
+#   root_block_device {
+#     volume_size = 30
+#     volume_type = "gp2"
+#   }
 
-  tags = {
-    Name        = "remix-recipe-prod-instance-${count.index + 1}"
-    Environment = "Production"
-    Owner       = "Shubham"
-  }
+#   tags = {
+#     Name        = "remix-recipe-prod-instance-${count.index + 1}"
+#     Environment = "Production"
+#     Owner       = "Shubham"
+#   }
 
-  # Install and configure Nginx
-  user_data = file("scripts/define-nginx.sh")
-}
+#   # Install and configure Nginx
+#   user_data = file("scripts/define-nginx.sh")
+# }
