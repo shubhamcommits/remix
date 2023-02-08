@@ -7,8 +7,7 @@ resource "aws_autoscaling_group" "asg" {
     var.autoscaling_group_name,
     aws_subnet.public-subnet
   ]
-
-  name                      = var.autoscaling_group_name
+  name_prefix               = var.autoscaling_group_name
   launch_configuration      = aws_launch_configuration.alc.name
   vpc_zone_identifier       = aws_subnet.public-subnet.*.id
   max_size                  = 10
