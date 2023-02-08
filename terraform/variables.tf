@@ -104,12 +104,12 @@ variable "elb_name" {
 
 # ASG Name
 variable "autoscaling_group_name" {
-  default     = "prod-remix-recipe-auto-scaling-group"
+  default     = "prod-remix-recipe-auto-scaling-group-"
   description = "The Auto Scaling Group Name"
 }
 
 # ALC Name
 variable "launch_configuration_name" {
-  default     = "prod-remix-recipe-launch-configuration"
+  default     = "prod-remix-recipe-launch-configuration-"
   description = "The Auto Scaling Group Name"
 }
