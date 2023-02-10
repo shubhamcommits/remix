@@ -12,7 +12,7 @@ permissions:
 env:
   TF_LOG: INFO
   AWS_REGION: ${{ secrets.AWS_REGION }}
-  ENVIRONMENT: ${{ if: eq(github.ref, 'refs/heads/master'), then: 'production', else: 'development' }}
+  ENVIRONMENT: ${{ if: eq(github.ref, 'refs/heads/development'), then: 'development', else: (if: eq(github.ref, 'refs/heads/staging'), then: 'staging', else: (if: eq(github.ref, 'refs/heads/production'), then: 'production', else: 'unknown')) }}
 jobs:
   deploy:
     runs-on: ubuntu-latest
