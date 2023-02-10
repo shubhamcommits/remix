@@ -12,7 +12,7 @@ resource "aws_elb" "elb" {
   internal        = false
   security_groups = [aws_security_group.sg.id]
   subnets         = aws_subnet.public-subnet.*.id
-  instances = aws_instance.ec2_instance.*.id
+  instances       = aws_instance.ec2_instance.*.id
 
   listener {
     instance_port     = 3000

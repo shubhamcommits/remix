@@ -26,5 +26,5 @@ resource "aws_instance" "ec2_instance" {
   }
 
   # Install and configure Nginx
-  user_data = file("../scripts/define-nginx.sh")
+  user_data = file("scripts/define-nginx.sh")
 }
