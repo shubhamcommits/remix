@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - development
   pull_request:
 permissions:
       id-token: write # This is required for aws oidc connection
@@ -11,6 +12,7 @@ permissions:
 env:
   TF_LOG: INFO
   AWS_REGION: ${{ secrets.AWS_REGION }}
+  ENVIRONMENT: ${{ if eq(github.ref, 'refs/heads/development') }}development${{ elif eq(github.ref, 'refs/heads/master') }}production${{ else }}unknown${{ end }}
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -36,7 +38,7 @@ jobs:
 
       - name: Terraform fmt
         id: fmt
-        run: terraform -chdir=./terraform fmt -check
+        run: terraform -chdir=./terraform/${ENVIRONMENT} fmt -check
         continue-on-error: true
 
       - name: Terraform Init
@@ -44,18 +46,18 @@ jobs:
         env:
           AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
           AWS_BUCKET_KEY_NAME: ${{ secrets.AWS_BUCKET_KEY_NAME }}
-        run: terraform -chdir=./terraform init 
+        run: terraform -chdir=./terraform/${ENVIRONMENT} init 
             -backend-config="bucket=${AWS_BUCKET_NAME}" 
             -backend-config="key=${AWS_BUCKET_KEY_NAME}"
             -backend-config="region=${AWS_REGION}"
 
       - name: Terraform Validate
         id: validate
-        run: terraform -chdir=./terraform validate -no-color
+        run: terraform -chdir=./terraform/${ENVIRONMENT} validate -no-color
 
       - name: Terraform Plan
         id: plan
-        run: terraform -chdir=./terraform plan -no-color
+        run: terraform -chdir=./terraform/${ENVIRONMENT} plan -no-color
         if: github.event_name == 'pull_request'
         continue-on-error: true
 
@@ -101,5 +103,5 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-        run: terraform -chdir=./terraform apply -auto-approve -input=false
+        if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/development') && github.event_name == 'push'
+        run: terraform -chdir=./terraform/${ENVIRONMENT} apply -auto-approve -input=false

@@ -23,11 +23,17 @@ sudo yum install yarn -y
 # Install pm2
 sudo yarn global add pm2
 
+# Create Directory
+mkdir -p /home/ec2-user/apps
+
+# Change Directory
+cd /home/ec2-user/apps
+
 # Setup Repository
 git clone https://github.com/shubhamcommits/remix.git
 
 # Change Directory
-cd /remix
+cd /home/ec2-user/apps/remix
 
 # Install the dependencies
 yarn install
@@ -36,6 +42,6 @@ yarn install
 yarn run build
 
 # Setup the application
-pm2 start "yarn run dev" --name "prod-remix-recipe-server"
+pm2 start "yarn run dev" --name "remix-recipe-server"
 
 exit 1

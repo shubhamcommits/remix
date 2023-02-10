@@ -18,6 +18,9 @@ yarn-error.log
 .env
 .env.production
 
+# Ecosystem Config Files
+ecosystem.config.js
+
 # Certificate Files
 **.cer
 
