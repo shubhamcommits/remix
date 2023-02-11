@@ -19,7 +19,7 @@ export class UserService {
                     .then((data: any) => {
 
                         // Resolve the Promise
-                        resolve({ data: data })
+                        resolve(data)
                     })
                     .catch((error: any) => {
 

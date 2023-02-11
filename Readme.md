@@ -30,13 +30,30 @@ NODE_ENV=development
 CLUSTER=false
 
 # Database Details
-DB_HOST='yourDbCluster'
-DB_USER='yourDbUser'
-DB_PASS='yourDbPassword'
+DB_HOST='DB_HOST'
+DB_HOST='DB_HOST'
+DB_PASS='DB_PASS'
 DB_PORT=3306
-DB_NAME='yourDbName'
+DB_NAME='DB_NAME'
 MAX_POOL=5
 MIN_POOL=1
+
+# Auth0 Details
+BASE_URL='BASE_URL'
+AUTH0_DOMAIN='AUTH0_DOMAIN'
+AUTH0_CLIENT_ID='AUTH0_CLIENT_ID'
+AUTH0_CLIENT_SECRET='AUTH0_CLIENT_SECRET'
+AUTH0_CALLBACK_URL='AUTH0_CALLBACK_URL'
+AUTH0_ISSUER_URL='AUTH0_ISSUER_URL'
+
+# OpenAI Details
+OPEN_AI_SECRET_KEY='OPEN_AI_SECRET_KEY'
+OPEN_AI_ADA_MODEL='text-ada-001'
+OPEN_AI_DAVINCI_MODEL='text-davinci-003'
+
+# AWS Details
+AWS_ACCESS_KEY='AWS_ACCESS_KEY'
+AWS_SECRET_KEY='AWS_SECRET_KEY'
 ```
 
 1.5.  Fire up a new terminal and go to `remix/` and run `npm run dev` or `yarn run dev`, and your server application shall start up on port `4000`
