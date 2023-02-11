@@ -5,10 +5,10 @@ cd /home/ec2-user/apps/remix
 git pull origin master
 
 # Install the dependencies
-yarn install
+npm install
 
 # Build the application
-yarn run build
+npm run build
 
 # Kill all the running application
 /usr/local/bin/pm2 kill
@@ -17,10 +17,10 @@ yarn run build
 /usr/local/bin/pm2 ls
 
 # Setup the application
-/usr/local/bin/pm2 start "yarn run dev" --name "remix-recipe-server"
+/usr/local/bin/pm2 start "npm run dev" --name "remix-recipe-server"
 
 # Init the application on server Startup
-/usr/local/bin/pm2 startup
+/usr/local/bin/pm2 startup systemd
 
 # Save the configuration on server
 /usr/local/bin/pm2 save

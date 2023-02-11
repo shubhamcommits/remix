@@ -26,7 +26,7 @@ curl -sL https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.r
 sudo yum install yarn -y
 
 # Install pm2
-sudo yarn global add pm2
+sudo npm install -g pm2
 
 # Create Directory
 mkdir -p $APPS_DIR
