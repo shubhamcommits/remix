@@ -35,6 +35,9 @@ git clone https://github.com/shubhamcommits/remix.git
 # Change Directory
 cd /home/ec2-user/apps/remix
 
+# Add the necessary permissions to the script
+chmod u+x ./deploy-app.sh
+
 # Redeploy the application
 ./deploy-app.sh
 
