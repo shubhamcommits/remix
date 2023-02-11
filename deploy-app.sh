@@ -11,22 +11,16 @@ npm install
 npm run build
 
 # Kill all the running application
-/usr/local/bin/pm2 kill
+pm2 kill
 
 # List down the applications and initiate the deamon
-/usr/local/bin/pm2 ls
+pm2 ls
 
 # Setup the application
-/usr/local/bin/pm2 start "npm run dev" --name "remix-recipe-server"
+pm2 start "npm run dev" --name "remix-recipe-server"
 
 # Init the application on server Startup
-/usr/local/bin/pm2 startup systemd
+pm2 startup systemd
 
 # Save the configuration on server
-/usr/local/bin/pm2 save
-
-# Enable the PM2-Root Service
-systemctl enable pm2-root
-
-# Start the PM2-Root Service
-systemctl start pm2-root
+pm2 save
