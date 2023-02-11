@@ -16,13 +16,16 @@ export class RecipeService {
      * @param prompt 
      * @returns 
      */
-    async createRecipe(url: any) {
+    async createRecipe(url: any, user_id: any) {
         return new Promise(async (resolve, reject) => {
             try {
 
                 // Parse the Recipe from the URL
                 helperService.scrapeURL(url)
                     .then((data: any) => {
+
+                        // Set the current USER ID
+                        data.recipe.user_id = user_id
 
                         // Create the new Recipe Type
                         Recipe.create(data.recipe)

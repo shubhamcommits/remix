@@ -249,8 +249,12 @@ export class HelperService {
 
                 if (typeof recipe['image'] == "object" && Array.isArray(recipe['image']) == false)
                     recipe['image'] = recipe['image']['url']
-                else if (Array.isArray(recipe['image']) == true)
-                    recipe['image'] = recipe['image'][0]
+                else if (Array.isArray(recipe['image']) == true){
+                    if(typeof recipe['image'][0] == 'object')
+                        recipe['image'] = recipe['image'][0]['url']
+                    else
+                        recipe['image'] = recipe['image'][0]
+                }
                 else
                     recipe['image'] = recipe['image']
             }
@@ -419,7 +423,6 @@ export class HelperService {
                         resolve({
                             message: 'Recipe has been parsed successfully!',
                             recipe: {
-                                user_id: '8c3b9418-427a-44a5-8d01-31dadd811179',
                                 title: recipe.name || title,
                                 ingredients: recipe.ingredient || [],
                                 original_author: recipe.author || '',

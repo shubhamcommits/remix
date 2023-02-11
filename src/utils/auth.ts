@@ -1,5 +1,5 @@
 // Import Auth Model
-import { Auth } from '../api/models'
+import { Auth, User } from '../api/models'
 
 // Import Express Types
 import { NextFunction, Request, Response } from 'express'
@@ -9,6 +9,9 @@ import { SendError } from '.'
 
 // Import JWT Module
 import { verify } from 'jsonwebtoken'
+
+// Import Services
+import { UserService } from '../api/services'
 
 /**
  * This function is responsible for verifying the token
@@ -109,10 +112,25 @@ const isLoggedIn = async (req: any, res: Response, next: NextFunction) => {
  * @param {*} next 
  * @returns 
  */
-const isloggedInToAuth0 = async (req: Request, res: Response, next: NextFunction) => {
+const isloggedInToAuth0 = async (req: any, res: Response, next: NextFunction) => {
     try {
 
         if (req.oidc.isAuthenticated()) {
+            
+            // Fetch Current User
+            let user: any = await User.findOne({
+                where: {
+                    email: req.oidc.user.email
+                }
+            })
+
+            if(user == null)
+                user = await new UserService()
+                .createUser(req.oidc.user.name, req.oidc.user.email)
+
+            // Set the User
+            req.user_id = user.user_id
+
             next()
 
         } else {

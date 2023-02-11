@@ -17,7 +17,7 @@ export class RecipeController {
     * @param next 
     * @returns 
     */
-    async createRecipe(req: Request, res: Response, next: NextFunction) {
+    async createRecipe(req: any, res: Response, next: NextFunction) {
         try {
 
             // Fetch the data from the request body
@@ -35,7 +35,7 @@ export class RecipeController {
 
             // Call the Service Function
             new RecipeService()
-                .createRecipe(url)
+                .createRecipe(url, req.user_id)
                 .then((data: any) => {
 
                     // Send Status 200 response

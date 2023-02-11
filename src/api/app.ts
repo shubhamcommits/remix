@@ -55,7 +55,12 @@ app.use(auth(config))
 
 // Default Route
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).json({ message: `${process.env.APP_NAME} is working!`, authenticated: req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out' })
+    res.status(200).json({ 
+        message: `${process.env.APP_NAME} is working!`, 
+        authenticated: req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out', 
+        cookie: req.oidc.isAuthenticated() ? req.headers.cookie : 'Not Authenticated',
+        user: req.oidc.isAuthenticated() ? req.oidc.user || 'No User' : 'No User'
+    })
 })
 
 // Correct REST naming
