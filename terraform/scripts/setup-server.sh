@@ -49,4 +49,5 @@ aws --region $REGION ssm get-parameter --name $PARAMETER  --with-decryption --ou
 # Redeploy the application
 ./deploy-app.sh
 
+# Return the Status
 exit 1
