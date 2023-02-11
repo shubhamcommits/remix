@@ -110,6 +110,6 @@ variable "autoscaling_group_name" {
 
 # ALC Name
 variable "launch_configuration_name" {
-  default     = "prod-remix-recipe-launch-configuration"
+  default     = "prod-remix-recipe-launch-configuration-"
   description = "The Auto Scaling Group Name"
 }

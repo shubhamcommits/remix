@@ -41,6 +41,13 @@ resource "aws_security_group" "sg" {
     cidr_blocks = [var.public_internet_cidr]
   }
 
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = [var.public_internet_cidr]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
