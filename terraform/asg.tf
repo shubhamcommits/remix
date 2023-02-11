@@ -14,7 +14,11 @@ resource "aws_autoscaling_group" "asg" {
   min_size                  = 1
   desired_capacity          = 3
   health_check_grace_period = 300
-  force_delete              = true
+
+ instance_refresh {
+    strategy = "Rolling"
+    triggers = ["tag"]
+  }
 
   tag {
     key                 = "Name"
