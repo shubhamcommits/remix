@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set Runtime Variables
-PARAMATER="PROD_RECIPE_REMIX_ENV_VARS"
+PARAMETER="PROD_RECIPE_REMIX_ENV_VARS"
 REGION="us-east-1"
 APPS_DIR="/home/ec2-user/apps"
 
@@ -44,7 +44,7 @@ cd $APPS_DIR/remix
 chmod u+x ./deploy-app.sh
 
 # Get parameters and put it into .env file inside application root
-aws ssm get-parameter --with-decryption --name $PARAMATER --region $REGION | jq '.Parameter.Value' > $APPS_DIR/remix/.env
+aws --region $REGION ssm get-parameter --name $PARAMETER  --with-decryption --output text --query Parameter.Value > $APPS_DIR/remix/.env
 
 # Redeploy the application
 ./deploy-app.sh
