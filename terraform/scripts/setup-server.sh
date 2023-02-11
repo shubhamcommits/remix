@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Set Runtime Variables
+PARAMATER="PROD_RECIPE_REMIX_ENV_VARS"
+REGION="us-east-1"
+APPS_DIR="/home/ec2-user/apps"
+
 # Update Packages
 sudo yum update -y
 
@@ -24,19 +29,22 @@ sudo yum install yarn -y
 sudo yarn global add pm2
 
 # Create Directory
-mkdir -p /home/ec2-user/apps
+mkdir -p $APPS_DIR
 
 # Change Directory
-cd /home/ec2-user/apps
+cd $APPS_DIR
 
 # Setup Repository
 git clone https://github.com/shubhamcommits/remix.git
 
 # Change Directory
-cd /home/ec2-user/apps/remix
+cd $APPS_DIR/remix
 
 # Add the necessary permissions to the script
 chmod u+x ./deploy-app.sh
+
+# Get parameters and put it into .env file inside application root
+aws ssm get-parameter --with-decryption --name $PARAMATER --region $REGION | jq '.Parameter.Value' > $APPS_DIR/remix/.env
 
 # Redeploy the application
 ./deploy-app.sh

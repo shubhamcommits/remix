@@ -15,8 +15,7 @@ yarn.lock
 yarn-error.log
 
 # Environment Files
-.env
-.env.production
+*.env
 
 # Ecosystem Config Files
 ecosystem.config.js
