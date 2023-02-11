@@ -35,13 +35,7 @@ git clone https://github.com/shubhamcommits/remix.git
 # Change Directory
 cd /home/ec2-user/apps/remix
 
-# Install the dependencies
-yarn install
-
-# Build the application
-yarn run build
-
-# Setup the application
-pm2 start "yarn run dev" --name "remix-recipe-server"
+# Redeploy the application
+./deploy-app.sh
 
 exit 1
