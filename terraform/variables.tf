@@ -31,6 +31,12 @@ variable "owner_name" {
 # Fetch list of all AZs present in a Region
 data "aws_availability_zones" "all" {}
 
+# Fetch the SSM Policy
+variable "aws_ssm_iam_policy" {
+  description = "The SSM IAM Policy"
+  default     = "global-ssm-parameter-store"
+}
+
 # Output the Value of AZs
 output "availability_zone_count" {
   value = length(data.aws_availability_zones.all.names)
