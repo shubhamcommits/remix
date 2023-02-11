@@ -11,16 +11,22 @@ yarn install
 yarn run build
 
 # Kill all the running application
-pm2 kill
+/usr/local/bin/pm2 kill
 
 # List down the applications and initiate the deamon
-pm2 ls
+/usr/local/bin/pm2 ls
 
 # Setup the application
-pm2 start "yarn run dev" --name "remix-recipe-server"
+/usr/local/bin/pm2 start "yarn run dev" --name "remix-recipe-server"
 
 # Init the application on server Startup
-pm2 startup
+/usr/local/bin/pm2 startup
 
 # Save the configuration on server
-pm2 save
+/usr/local/bin/pm2 save
+
+# Enable the PM2-Root Service
+systemctl enable pm2-root
+
+# Start the PM2-Root Service
+systemctl start pm2-root
