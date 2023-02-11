@@ -19,13 +19,10 @@ resource "aws_iam_role" "role-launch-ec2" {
       },
       {
         Effect = "Allow",
-        Action = [
-                "ssm:GetParameters",
-                "ssm:GetParameter"
-            ],
-        Resource = [
-                "arn:aws:ssm:*:*:parameter/*"
-            ]
+        Action = ["ssm:GetParameters", "ssm:GetParameter"],
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
       }
     ]
 })
