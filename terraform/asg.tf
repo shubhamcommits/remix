@@ -11,8 +11,8 @@ resource "aws_autoscaling_group" "asg" {
   launch_configuration      = aws_launch_configuration.alc.name
   vpc_zone_identifier       = aws_subnet.public-subnet.*.id
   max_size                  = 10
-  min_size                  = 1
-  desired_capacity          = 3
+  min_size                  = 2
+  desired_capacity          = 2
   health_check_grace_period = 300
 
  instance_refresh {
