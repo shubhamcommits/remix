@@ -47,7 +47,7 @@ chmod u+x ./deploy-app.sh
 aws --region $REGION ssm get-parameter --name $PARAMETER  --with-decryption --output text --query Parameter.Value > $APPS_DIR/remix/.env
 
 # Redeploy the application - PM2
-./deploy-app.sh
+./deploy-app.sh > $APPS_DIR/deploy-app.log
 
 # Return the Status
 exit 1
