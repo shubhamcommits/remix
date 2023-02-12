@@ -27,9 +27,9 @@ resource "aws_autoscaling_group" "asg" {
   }
 
   # Required to redeploy without an outage.
-  # lifecycle {
-  #   create_before_destroy = true
-  # }
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 # Create an attachment for our asg to the main elastic load balancer
