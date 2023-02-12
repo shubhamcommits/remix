@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # Set Runtime Variables
-PARAMETER="PROD_RECIPE_REMIX_ENV_VARS"
-REGION="us-east-1"
 APPS_DIR="/home/ec2-user/apps"
 
 # Update Packages
@@ -43,11 +41,8 @@ cd $APPS_DIR/remix
 # Add the necessary permissions to the script
 chmod u+x ./deploy-app.sh
 
-# Get parameters and put it into .env file inside application root
-aws --region $REGION ssm get-parameter --name $PARAMETER  --with-decryption --output text --query Parameter.Value > $APPS_DIR/remix/.env
-
 # Redeploy the application - PM2
-./deploy-app.sh > $APPS_DIR/deploy-app.log
+./deploy-app.sh > $APPS_DIR/remix/deploy-app.log
 
 # Return the Status
 exit 1
