@@ -23,6 +23,9 @@ ecosystem.config.js
 # Certificate Files
 **.cer
 
+# Log files
+*.log
+
 # Dist Folder
 dist/
 
