@@ -16,8 +16,7 @@ resource "aws_autoscaling_group" "asg" {
   health_check_grace_period = 300
 
   instance_refresh {
-    enabled = true
-    # strategy = "Rolling"
+    strategy = "Rolling"
     # triggers = ["tag"]
   }
 
