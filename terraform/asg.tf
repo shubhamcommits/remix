@@ -17,7 +17,7 @@ resource "aws_autoscaling_group" "asg" {
 
   instance_refresh {
     strategy = "Rolling"
-    # triggers = ["tag"]
+    triggers = ["tag"]
   }
 
   tag {
