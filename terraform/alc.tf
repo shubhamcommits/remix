@@ -27,7 +27,7 @@ resource "aws_launch_configuration" "alc" {
   # Add IAM instance profile
   iam_instance_profile = aws_iam_instance_profile.ec2-instance-profile.name
 
-  lifecycle {
-    create_before_destroy = true
-  }
+  # lifecycle {
+  #   create_before_destroy = true
+  # }
 }
