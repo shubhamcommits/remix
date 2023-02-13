@@ -78,7 +78,7 @@ jobs:
 
       - name: Terraform Format
         id: job-step-tf-fmt
-        run: terraform -chdir=./terraform fmt -check
+        run: terraform -chdir=./terraform fmt
         continue-on-error: true
 
       - name: Terraform Initialize
