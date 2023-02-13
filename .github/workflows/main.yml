@@ -61,10 +61,6 @@ jobs:
         run: |
           ls -la
 
-      - name: Set Working Directory
-        id: job-step-tf-set-wd
-        working-directory: ./terraform
-
       - name: Setup Terraform
         id: job-step-tf-setup
         uses: hashicorp/setup-terraform@v2
