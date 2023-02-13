@@ -74,7 +74,7 @@ jobs:
       - name: List All Files
         id: job-step-tf-list-files
         run: |
-          ls -la
+          echo "KEY_NAME: ${AWS_BUCKET_KEY_NAME}"
 
       - name: Setup Terraform
         id: job-step-tf-setup
