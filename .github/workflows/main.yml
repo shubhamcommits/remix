@@ -84,9 +84,9 @@ jobs:
       - name: Terraform Initialize
         id: job-step-tf-init
         run: terraform -chdir=./terraform init 
-            -backend-config="bucket=${env.AWS_BUCKET_NAME}" 
-            -backend-config="key=${env.AWS_BUCKET_KEY_NAME}"
-            -backend-config="region=${env.AWS_REGION}"
+            -backend-config="bucket=${AWS_BUCKET_NAME}" 
+            -backend-config="key=${AWS_BUCKET_KEY_NAME}"
+            -backend-config="region=${AWS_REGION}"
 
       - name: Terraform Validate
         id: job-step-tf-validate
