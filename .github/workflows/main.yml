@@ -56,6 +56,15 @@ jobs:
     needs: [ build-code, configure-aws ]
 
     steps:
+      - name: List All Files
+        id: job-step-list-files
+        run: |
+          ls -la
+
+      - name: Set Working Directory
+        id: job-step-tf-set-wd
+        working-directory: ./terraform
+
       - name: Setup Terraform
         id: job-step-tf-setup
         uses: hashicorp/setup-terraform@v2
@@ -64,22 +73,22 @@ jobs:
 
       - name: Terraform Format
         id: job-step-tf-fmt
-        run: terraform -chdir=./terraform fmt -check
+        run: terraform fmt -check
         continue-on-error: true
 
       - name: Terraform Initialize
         id: job-step-tf-init
-        run: terraform -chdir=./terraform init 
+        run: terraform init 
             -backend-config="bucket=${{ env.AWS_BUCKET_NAME }}" 
             -backend-config="key=${{ env.AWS_BUCKET_KEY_NAME }}"
             -backend-config="region=${{ env.AWS_REGION }}"
 
       - name: Terraform Validate
         id: job-step-tf-validate
-        run: terraform -chdir=./terraform validate
+        run: terraform validate
 
       - name: Terraform Plan
         id: job-step-tf-plan
-        run: terraform -chdir=./terraform plan
+        run: terraform plan
         if: github.event_name == 'pull_request' || github.event_name == 'push'
         continue-on-error: true
