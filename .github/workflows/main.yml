@@ -41,7 +41,7 @@ jobs:
 
     - name: Store build output
       id: job-step-store-build-output
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: build-output
         path: .
@@ -67,7 +67,7 @@ jobs:
 
     steps:
       - name: Download Build Output
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: build-output
       
@@ -90,9 +90,9 @@ jobs:
       - name: Terraform Initialize
         id: job-step-tf-init
         run: terraform -chdir=./terraform init 
-            -backend-config="bucket=${{ env.AWS_BUCKET_NAME }}" 
-            -backend-config="key=${{ env.AWS_BUCKET_KEY_NAME }}"
-            -backend-config="region=${{ env.AWS_REGION }}"
+            -backend-config="bucket=${AWS_BUCKET_NAME}" 
+            -backend-config="key=${AWS_BUCKET_KEY_NAME}"
+            -backend-config="region=${AWS_REGION}"
 
       - name: Terraform Validate
         id: job-step-tf-validate
