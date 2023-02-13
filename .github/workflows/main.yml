@@ -12,8 +12,9 @@ permissions:
       pull-requests: write
 env:
   ENVIRONMENT: ${{ if eq(github.ref, 'refs/heads/master') }}production
-              ${{ if eq(github.ref, 'refs/heads/develop') }}staging
-              ${{ if eq(github.ref, 'refs/heads/development') }}development
+               ${{ else if eq(github.ref, 'refs/heads/develop') }}staging
+               ${{ else if eq(github.ref, 'refs/heads/development') }}development
+               ${{ else }}development
 
 jobs:
   build-code:
