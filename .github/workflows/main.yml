@@ -15,6 +15,7 @@ env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
   AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
   AWS_BUCKET_KEY_NAME: ${{ secrets.AWS_BUCKET_KEY_NAME }}
+  TERRAFORM_WORKSPACE: ${{ secrets.ENVIRONMENT }}
 
 jobs:
   build-code:
@@ -87,6 +88,14 @@ jobs:
             -backend-config="bucket=${AWS_BUCKET_NAME}" 
             -backend-config="key=${AWS_BUCKET_KEY_NAME}"
             -backend-config="region=${AWS_REGION}"
+
+      - name: Select Existing/Create Terraform Workspace
+        id: job-step-tf-init-workspace
+        run: terraform -chdir=./terraform workspace select ${TERRAFORM_WORKSPACE} || terraform -chdir=./terraform workspace new ${TERRAFORM_WORKSPACE}
+
+      - name: Show Current Workspace
+        id: job-step-tf-show-workspace
+        run: terraform -chdir=./terraform workspace show
 
       - name: Terraform Validate
         id: job-step-tf-validate
