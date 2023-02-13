@@ -91,7 +91,10 @@ jobs:
 
       - name: Select Existing/Create Terraform Workspace
         id: job-step-tf-init-workspace
-        run: terraform -chdir=./terraform workspace select ${TERRAFORM_WORKSPACE} || terraform -chdir=./terraform workspace new ${TERRAFORM_WORKSPACE}
+        run: |
+          if $(terraform -chdir=./terraform workspace list | grep -q "${TERRAFORM_WORKSPACE}") ; 
+          then terraform -chdir=./terraform workspace select ${TERRAFORM_WORKSPACE}; 
+          else terraform -chdir=./terraform workspace new ${TERRAFORM_WORKSPACE}; fi
 
       - name: Show Current Workspace
         id: job-step-tf-show-workspace
