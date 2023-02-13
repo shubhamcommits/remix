@@ -36,6 +36,9 @@ jobs:
         # Build the application
         yarn run build
 
+        # Remove the Dependencies
+        rm -rf node_modules
+
     - name: Store build output
       id: job-step-store-build-output
       uses: actions/upload-artifact@v2
