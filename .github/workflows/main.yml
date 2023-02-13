@@ -36,6 +36,11 @@ jobs:
         # Build the application
         yarn run build
 
+      - name: List All Files
+        id: job-step-list-files
+        run: |
+          ls -la
+
   configure-aws:
     name: Configure Provider Credentials
     runs-on: ubuntu-latest
@@ -57,7 +62,7 @@ jobs:
 
     steps:
       - name: List All Files
-        id: job-step-list-files
+        id: job-step-tf-list-files
         run: |
           ls -la
 
