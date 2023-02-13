@@ -36,10 +36,12 @@ jobs:
         # Build the application
         yarn run build
 
-      - name: List All Files
-        id: job-step-list-files
-        run: |
-          ls -la
+    - name: Store build output
+      id: job-step-store-build-output
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-output
+        path: .
 
   configure-aws:
     name: Configure Provider Credentials
@@ -61,6 +63,11 @@ jobs:
     needs: [ build-code, configure-aws ]
 
     steps:
+      - name: Download Build Output
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+      
       - name: List All Files
         id: job-step-tf-list-files
         run: |
