@@ -21,11 +21,6 @@ jobs:
     name: Build the Code
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        shell: bash
-        working-directory: .
-
     steps:
     - name: Checkout Code
       uses: actions/checkout@v3
@@ -45,11 +40,6 @@ jobs:
     name: Configure Provider Credentials
     runs-on: ubuntu-latest
     needs: [ build-code ]
-
-    defaults:
-      run:
-        shell: bash
-        working-directory: .
     
     steps:
       - name: Configure AWS credentials from AWS account
@@ -64,11 +54,6 @@ jobs:
     name: Provision Infrastructure
     runs-on: ubuntu-latest
     needs: [ build-code, configure-aws ]
-
-    defaults:
-      run:
-        shell: bash
-        working-directory: .
 
     steps:
       - name: Setup Terraform
