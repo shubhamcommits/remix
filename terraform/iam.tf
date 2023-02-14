@@ -6,7 +6,7 @@ resource "aws_iam_role" "role-launch-ec2" {
     local.iam_role_launch_instance_name
   ]
 
-  name = local.iam_role_launch_instance_name
+  name                = local.iam_role_launch_instance_name
   managed_policy_arns = [aws_iam_policy.ssm_policy.arn]
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -19,7 +19,7 @@ resource "aws_iam_role" "role-launch-ec2" {
         }
       }
     ]
-})
+  })
 
   tags = {
     Name        = local.iam_role_launch_instance_name
@@ -34,24 +34,24 @@ resource "aws_iam_policy" "ssm_policy" {
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
-        {
-            Sid = "VisualEditor0",
-            Effect = "Allow",
-            Action = [
-                "ssm:PutParameter",
-                "ssm:LabelParameterVersion",
-                "ssm:DeleteParameter",
-                "ssm:UnlabelParameterVersion",
-                "ssm:DescribeParameters",
-                "ssm:GetParameterHistory",
-                "ssm:GetParametersByPath",
-                "ssm:GetParameters",
-                "ssm:GetParameter",
-                "ssm:DeleteParameters",
-                "ssm:ListTagsForResource"
-            ],
-            Resource = "*"
-        }
+      {
+        Sid    = "VisualEditor0",
+        Effect = "Allow",
+        Action = [
+          "ssm:PutParameter",
+          "ssm:LabelParameterVersion",
+          "ssm:DeleteParameter",
+          "ssm:UnlabelParameterVersion",
+          "ssm:DescribeParameters",
+          "ssm:GetParameterHistory",
+          "ssm:GetParametersByPath",
+          "ssm:GetParameters",
+          "ssm:GetParameter",
+          "ssm:DeleteParameters",
+          "ssm:ListTagsForResource"
+        ],
+        Resource = "*"
+      }
     ]
   })
 }

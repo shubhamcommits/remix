@@ -26,6 +26,18 @@ resource "aws_autoscaling_group" "asg" {
     propagate_at_launch = true
   }
 
+  tag {
+    key                 = "Environment"
+    value               = local.environment_name
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Owner"
+    value               = local.owner_name
+    propagate_at_launch = true
+  }
+
   # Required to redeploy without an outage.
   lifecycle {
     create_before_destroy = true

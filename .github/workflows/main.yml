@@ -124,3 +124,11 @@ jobs:
           TF_VAR_environment_name: ${{ env.TF_VAR_environment_name }}
           TF_VAR_application_name: recipe-remix
         continue-on-error: true
+
+      - name: Terraform Apply
+        id: job-step-tf-apply
+        if: github.event_name == 'push'
+        env:
+          TF_VAR_environment_name: ${{ env.TF_VAR_environment_name }}
+          TF_VAR_application_name: recipe-remix
+        run: terraform -chdir=./terraform apply -auto-approve -input=false
