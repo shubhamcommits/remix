@@ -1,14 +1,14 @@
 # Create an aws launch configuration for our instances
 resource "aws_launch_configuration" "alc" {
   depends_on = [
-    var.ec2_default_ami,
-    var.ec2_instance_type,
-    var.launch_configuration_name,
+    local.ec2_default_ami,
+    local.ec2_instance_type,
+    local.launch_configuration_name,
     aws_security_group.sg
   ]
-  name_prefix     = var.launch_configuration_name
-  image_id        = var.ec2_default_ami
-  instance_type   = var.ec2_instance_type
+  name_prefix     = local.launch_configuration_name
+  image_id        = local.ec2_default_ami
+  instance_type   = local.ec2_instance_type
   security_groups = [aws_security_group.sg.id]
 
   # Install and configure Nginx

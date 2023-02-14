@@ -1,12 +1,12 @@
 # Define an IAM role
 resource "aws_iam_role" "role-launch-ec2" {
   depends_on = [
-    var.owner_name,
-    var.environment_name,
-    var.iam_role_launch_instance_name
+    local.owner_name,
+    local.environment_name,
+    local.iam_role_launch_instance_name
   ]
 
-  name = var.iam_role_launch_instance_name
+  name = local.iam_role_launch_instance_name
   managed_policy_arns = [aws_iam_policy.ssm_policy.arn]
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -22,15 +22,15 @@ resource "aws_iam_role" "role-launch-ec2" {
 })
 
   tags = {
-    Name        = var.iam_role_launch_instance_name
-    Environment = var.environment_name
-    Owner       = var.owner_name
+    Name        = local.iam_role_launch_instance_name
+    Environment = local.environment_name
+    Owner       = local.owner_name
   }
 }
 
 # Define SSM IAM Policy
 resource "aws_iam_policy" "ssm_policy" {
-  name = var.aws_ssm_iam_policy
+  name = local.aws_ssm_iam_policy
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -60,17 +60,17 @@ resource "aws_iam_policy" "ssm_policy" {
 resource "aws_iam_instance_profile" "ec2-instance-profile" {
   depends_on = [
     aws_iam_role.role-launch-ec2,
-    var.owner_name,
-    var.environment_name,
-    var.iam_instance_profile_name
+    local.owner_name,
+    local.environment_name,
+    local.iam_instance_profile_name
   ]
 
-  name = var.iam_instance_profile_name
+  name = local.iam_instance_profile_name
   role = aws_iam_role.role-launch-ec2.name
 
   tags = {
-    Name        = var.iam_instance_profile_name
-    Environment = var.environment_name
-    Owner       = var.owner_name
+    Name        = local.iam_instance_profile_name
+    Environment = local.environment_name
+    Owner       = local.owner_name
   }
 }

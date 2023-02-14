@@ -64,13 +64,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build-output
-
-      - name: Create TF Variable Files
-        id: job-step-tf-create-var
-        run: |
-          touch ./terraform/environment.tfvars
-          echo 'environment_name="dev"' > ./terraform/environment.tfvars
-          echo 'application_name="recipe-remix"' >> ./terraform/environment.tfvars
       
       - name: List All Files
         id: job-step-tf-list-files
@@ -99,6 +92,12 @@ jobs:
             -backend-config="bucket=${AWS_BUCKET_NAME}" 
             -backend-config="key=${AWS_BUCKET_KEY_NAME}"
             -backend-config="region=${AWS_REGION}"
+
+      - name: Export TF Variable Files
+        id: job-step-tf-export-var
+        run: |
+          export TF_VAR_environment_name="dev"
+          export TF_VAR_application_name="recipe-remix"
 
       - name: Select Existing/Create Terraform Workspace
         id: job-step-tf-init-workspace

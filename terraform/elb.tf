@@ -1,13 +1,13 @@
 # Create an elb for our instances
 resource "aws_elb" "elb" {
   depends_on = [
-    var.elb_name,
-    var.environment_name,
-    var.owner_name,
+    local.elb_name,
+    local.environment_name,
+    local.owner_name,
     aws_security_group.sg,
     data.aws_availability_zones.all
   ]
-  name            = var.elb_name
+  name            = local.elb_name
   internal        = false
   security_groups = [aws_security_group.sg.id]
   subnets         = aws_subnet.public-subnet.*.id
@@ -30,9 +30,9 @@ resource "aws_elb" "elb" {
   cross_zone_load_balancing = true
 
   tags = {
-    Name        = var.elb_name
-    Environment = var.environment_name
-    Owner       = var.owner_name
+    Name        = local.elb_name
+    Environment = local.environment_name
+    Owner       = local.owner_name
   }
 }
 
@@ -42,15 +42,15 @@ resource "aws_elb" "elb" {
 #   count = 2
 
 #   depends_on = [
-#     var.ec2_default_ami,
-#     var.ec2_instance_type,
+#     local.ec2_default_ami,
+#     local.ec2_instance_type,
 #     aws_security_group.sg,
 #     aws_subnet.private-subnet,
 #     aws_subnet.public-subnet,
 #     aws_iam_instance_profile.ec2-instance-profile
 #   ]
-#   ami                         = var.ec2_default_ami
-#   instance_type               = var.ec2_instance_type
+#   ami                         = local.ec2_default_ami
+#   instance_type               = local.ec2_instance_type
 #   vpc_security_group_ids      = [aws_security_group.sg.id]
 #   subnet_id                   = aws_subnet.public-subnet[0].id
 #   associate_public_ip_address = true
