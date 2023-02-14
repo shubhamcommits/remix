@@ -116,6 +116,9 @@ jobs:
 
       - name: Terraform Plan
         id: job-step-tf-plan
+        env:
+          TF_VAR_environment_name: dev
+          TF_VAR_application_name: recipe-remix
         run: terraform -chdir=./terraform plan
         if: github.event_name == 'pull_request' || github.event_name == 'push'
         continue-on-error: true
