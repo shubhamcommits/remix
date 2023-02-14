@@ -95,10 +95,9 @@ jobs:
       - name: Select Existing/Create Terraform Workspace
         id: job-step-tf-init-workspace
         env:
-          TF_WORKSPACE: development
+          TERRAFORM_WORKSPACE: development
         run: |
-          terraform -chdir=./terraform workspace create ${TF_WORKSPACE} || terraform -chdir=./terraform workspace select ${TF_WORKSPACE}
-          export TF_WORKSPACE=${TF_WORKSPACE}
+            terraform -chdir=./terraform workspace select $TERRAFORM_WORKSPACE || terraform workspace new $TERRAFORM_WORKSPACE
 
       - name: Show Current Workspace
         id: job-step-tf-show-workspace
