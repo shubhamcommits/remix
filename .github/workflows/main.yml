@@ -95,7 +95,7 @@ jobs:
       - name: Select Existing/Create Terraform Workspace
         id: job-step-tf-init-workspace
         env:
-          TERRAFORM_WORKSPACE: ${{ secrets.TERRAFORM_WORKSPACE }}
+          TERRAFORM_WORKSPACE: ${{ env.ENVIRONMENT }}
         run: |
           if $(terraform -chdir=./terraform workspace list | grep -q "${TERRAFORM_WORKSPACE}") ; 
           then terraform -chdir=./terraform workspace select ${TERRAFORM_WORKSPACE}; 
