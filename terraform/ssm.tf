@@ -35,7 +35,7 @@ resource "aws_ssm_document" "setup_server" {
 
 # Associate SSM with Instances
 resource "aws_ssm_association" "setup_server_association" {
-  name = "install-nginx"
+  name = local.ssm_document
 
   targets {
       key    = "tag:Environment"
