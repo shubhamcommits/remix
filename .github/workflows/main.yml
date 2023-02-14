@@ -93,12 +93,20 @@ jobs:
             -backend-config="key=${AWS_BUCKET_KEY_NAME}"
             -backend-config="region=${AWS_REGION}"
 
+      - name: Set environment variables based on branch
+        run: |
+          if [ "$GITHUB_REF" = "refs/heads/master" ] || [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            echo "TF_VAR_environment_name=prod" >> $GITHUB_ENV
+          elif [ "$GITHUB_REF" = "refs/heads/development" ]; then
+            echo "TF_VAR_environment_name=dev" >> $GITHUB_ENV
+          fi
+
       - name: Select Existing/Create Terraform Workspace
         id: job-step-tf-init-workspace
         env:
-          TERRAFORM_WORKSPACE: development
+          TF_WORKSPACE: ${{ env.TF_VAR_environment_name }}
         run: |
-            terraform -chdir=./terraform workspace select $TERRAFORM_WORKSPACE || terraform workspace new $TERRAFORM_WORKSPACE
+            terraform -chdir=./terraform workspace select $TF_WORKSPACE || terraform workspace new $TF_WORKSPACE
 
       - name: Show Current Workspace
         id: job-step-tf-show-workspace
@@ -107,14 +115,6 @@ jobs:
       - name: Terraform Validate
         id: job-step-tf-validate
         run: terraform -chdir=./terraform validate
-
-      - name: Set environment variable based on branch
-        run: |
-          if [ "$GITHUB_REF" = "refs/heads/master" ] || [ "$GITHUB_REF" = "refs/heads/main" ]; then
-            echo "TF_VAR_environment_name=prod" >> $GITHUB_ENV
-          elif [ "$GITHUB_REF" = "refs/heads/development" ]; then
-            echo "TF_VAR_environment_name=dev" >> $GITHUB_ENV
-          fi
 
       - name: Terraform Plan
         id: job-step-tf-plan
