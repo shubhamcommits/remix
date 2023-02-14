@@ -47,7 +47,6 @@ jobs:
     name: Provision Infrastructure
     runs-on: ubuntu-latest
     needs: [ build-code ]
-    environment: ${{ secrets.ENVIRONMENT }}
 
     steps:
       - name: Configure AWS credentials from AWS account
@@ -92,7 +91,7 @@ jobs:
       - name: Select Existing/Create Terraform Workspace
         id: job-step-tf-init-workspace
         env:
-          TERRAFORM_WORKSPACE: ${{ secrets.ENVIRONMENT }}
+          TERRAFORM_WORKSPACE: ${{ env.ENVIRONMENT }}
         run: |
           if $(terraform -chdir=./terraform workspace list | grep -q "${TERRAFORM_WORKSPACE}") ; 
           then terraform -chdir=./terraform workspace select ${TERRAFORM_WORKSPACE}; 
