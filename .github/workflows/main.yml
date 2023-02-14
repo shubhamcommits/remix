@@ -95,11 +95,10 @@ jobs:
       - name: Select Existing/Create Terraform Workspace
         id: job-step-tf-init-workspace
         env:
-          TERRAFORM_WORKSPACE: development
+          TF_WORKSPACE: development
         run: |
-          if $(terraform -chdir=./terraform workspace list | grep -q "${TERRAFORM_WORKSPACE}") ; 
-          then terraform -chdir=./terraform workspace select ${TERRAFORM_WORKSPACE}; 
-          else terraform -chdir=./terraform workspace new ${TERRAFORM_WORKSPACE}; fi
+          terraform -chdir=./terraform workspace create ${TF_WORKSPACE} || echo "Workspace ${TF_WORKSPACE} already exists or cannot be created"
+          export TF_WORKSPACE=$TF_WORKSPACE
 
       - name: Show Current Workspace
         id: job-step-tf-show-workspace
