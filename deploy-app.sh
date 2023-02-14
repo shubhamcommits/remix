@@ -1,5 +1,5 @@
 # Set Runtime Variables
-PARAMETER="PROD_RECIPE_REMIX_ENV_VARS"
+PARAMETER="DEV_RECIPE_REMIX_ENV_VARS"
 REGION="us-east-1"
 APPS_DIR="/home/ec2-user/apps"
 
