@@ -49,10 +49,11 @@ jobs:
     steps:
       - name: Configure AWS credentials from AWS account
         id: job-step-aws-conf
+        environment: ${{ if eq(github.head_ref, 'master') }}production{{else}}development{{end}}
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
-          role-to-assume: ${{ env.AWS_ROLE }}
-          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
           role-session-name: GitHub-OIDC-TERRAFORM    
 
       - name: Download Build Output
