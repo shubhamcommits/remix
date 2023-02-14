@@ -48,7 +48,7 @@ jobs:
     env:
       ENVIRONMENT: ${{ eq(github.ref, 'refs/heads/master') ? 'production' : 'development' }}
 
-    environment: development
+    environment: Development
     
     steps:
       - name: Configure AWS credentials from AWS account
