@@ -45,8 +45,8 @@ jobs:
     name: Provision Infrastructure
     runs-on: ubuntu-latest
     needs: [ build-code ]
-    environment: ${{ if eq(github.head_ref, 'master') }}production{{else}}development{{end}}
-    
+    environment: ${{ eq(github.head_ref, 'master') ? 'production' : 'development' }}
+
     steps:
       - name: Configure AWS credentials from AWS account
         id: job-step-aws-conf
