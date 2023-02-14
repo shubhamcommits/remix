@@ -106,7 +106,7 @@ jobs:
         env:
           WORKSPACE: ${{ env.TF_VAR_environment_name }}
         run: |
-            terraform -chdir=./terraform workspace select $WORKSPACE || terraform workspace new $WORKSPACE
+            terraform -chdir=./terraform workspace select $WORKSPACE || terraform -chdir=./terraform workspace new $WORKSPACE
 
       - name: Show Current Workspace
         id: job-step-tf-show-workspace
