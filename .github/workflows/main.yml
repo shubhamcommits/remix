@@ -11,10 +11,7 @@ permissions:
       contents: read
       pull-requests: write
 env:
-  ENVIRONMENT: ${{ if eq(github.ref, 'refs/heads/master') }}production
-               ${{ else if eq(github.ref, 'refs/heads/develop') }}staging
-               ${{ else if eq(github.ref, 'refs/heads/development') }}development
-               ${{ else }}development
+  ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
 
 jobs:
   build-code:
