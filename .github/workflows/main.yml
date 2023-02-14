@@ -93,12 +93,6 @@ jobs:
             -backend-config="key=${AWS_BUCKET_KEY_NAME}"
             -backend-config="region=${AWS_REGION}"
 
-      - name: Export TF Variable Files
-        id: job-step-tf-export-var
-        run: |
-          export TF_VAR_environment_name="dev"
-          export TF_VAR_application_name="recipe-remix"
-
       - name: Select Existing/Create Terraform Workspace
         id: job-step-tf-init-workspace
         env:
@@ -116,9 +110,9 @@ jobs:
 
       - name: Terraform Plan
         id: job-step-tf-plan
-        env:
-          TF_VAR_environment_name: dev
-          TF_VAR_application_name: recipe-remix
         run: terraform -chdir=./terraform plan
         if: github.event_name == 'pull_request' || github.event_name == 'push'
+        env:
+          TF_VAR_environment_name: ${{ if startsWith(github.ref, 'refs/heads/master') }}prod${{ else }}dev${{ endif }}
+          TF_VAR_application_name: recipe-remix
         continue-on-error: true
