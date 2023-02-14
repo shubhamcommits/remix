@@ -1,3 +1,13 @@
+# Set the Environment Name
+locals {
+  environment_name = terraform.workspace
+}
+
+# Set the Application Name
+locals {
+  application_name = terraform.workspace
+}
+
 # Define Your AWS Region
 variable "aws_region" {
   description = "The AWS Region"
@@ -7,7 +17,7 @@ variable "aws_region" {
 # Define Your VPC Name
 variable "vpc_name" {
   description = "The VPC Name"
-  default     = "prod-main-vpc"
+  default     = "${locals.environment_name}-main-vpc"
 }
 
 # Define Your VPC CIDR Block
@@ -19,7 +29,7 @@ variable "vpc_cidr" {
 # Define Your Environment
 variable "environment_name" {
   description = "Environment Name"
-  default     = "Production"
+  default     = "${locals.environment_name}"
 }
 
 # Define the Owner Name
@@ -50,7 +60,7 @@ variable "ec2_instance_type" {
 
 # EC2 Default Instance Name
 variable "ec2_instance_name" {
-  default     = "prod-remix-recipe-webserver"
+  default     = "${locals.environment_name}-${locals.application_name}-webserver"
   description = "AWS EC2 Instance Name"
 }
 
@@ -68,54 +78,54 @@ variable "ec2_default_ami" {
 
 # Launch EC2 Instance Role
 variable "iam_role_launch_instance_name" {
-  default     = "prod-role-launch-instance"
+  default     = "${locals.environment_name}-role-launch-instance"
   description = "Launch Instance Role Name"
 }
 
 # IAM Instance Profile
 variable "iam_instance_profile_name" {
-  default     = "prod-iam-instance-profile"
+  default     = "${locals.environment_name}-iam-instance-profile"
   description = "The IAM Instance Profile Name"
 }
 
 # Security Group Name
 variable "security_group_name" {
-  default     = "prod-remix-recipe-security-group"
+  default     = "${locals.environment_name}-${locals.application_name}-security-group"
   description = "Security Group Name"
 }
 
 # Private Subnet Name
 variable "private_subnet_name" {
-  default     = "prod-private-subnet"
+  default     = "${locals.environment_name}-private-subnet"
   description = "Private Subnet Name"
 }
 
 # Public Subnet Name
 variable "public_subnet_name" {
-  default     = "prod-public-subnet"
+  default     = "${locals.environment_name}-public-subnet"
   description = "Public Subnet Name"
 }
 
 # Internet Gateway Name
 variable "internet_gateway_name" {
-  default     = "prod-main-internet-gateway"
+  default     = "${locals.environment_name}-main-internet-gateway"
   description = "The Internet Gateway Name"
 }
 
 # ELB Name
 variable "elb_name" {
-  default     = "prod-remix-recipe-load-balancer"
+  default     = "${locals.environment_name}-${locals.application_name}-load-balancer"
   description = "The ELB Name"
 }
 
 # ASG Name
 variable "autoscaling_group_name" {
-  default     = "prod-remix-recipe-auto-scaling-group"
+  default     = "${locals.environment_name}-${locals.application_name}-auto-scaling-group"
   description = "The Auto Scaling Group Name"
 }
 
 # ALC Name
 variable "launch_configuration_name" {
-  default     = "prod-remix-recipe-launch-configuration-"
+  default     = "${locals.environment_name}-${locals.application_name}-launch-configuration-"
   description = "The Auto Scaling Group Name"
 }
