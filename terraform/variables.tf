@@ -43,7 +43,7 @@ data "aws_availability_zones" "all" {}
 
 # Fetch the SSM Policy
 locals {
-  aws_ssm_iam_policy = "global-ssm-parameter-store"
+  aws_ssm_iam_policy = "${local.environment_name}-ssm-parameter-store"
 }
 
 # Output the Value of AZs
