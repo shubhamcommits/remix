@@ -45,7 +45,7 @@ jobs:
     name: Provision Infrastructure
     runs-on: ubuntu-latest
     needs: [ build-code ]
-    environment: Development
+    environment: development
     
     steps:
       - name: Configure AWS credentials from AWS account
