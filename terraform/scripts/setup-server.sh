@@ -14,6 +14,7 @@ sudo amazon-linux-extras install nginx1.12
 
 # Start and enable nginx
 sudo systemctl start nginx
+
 sudo systemctl enable nginx
 
 # Setup Node.js
