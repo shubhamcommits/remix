@@ -97,8 +97,8 @@ jobs:
         env:
           TF_WORKSPACE: development
         run: |
-          terraform -chdir=./terraform workspace create ${TF_WORKSPACE} || echo "Workspace ${TF_WORKSPACE} already exists or cannot be created"
-          export TF_WORKSPACE=$TF_WORKSPACE
+          terraform -chdir=./terraform workspace create ${TF_WORKSPACE} || terraform -chdir=./terraform workspace select ${TF_WORKSPACE}
+          export TF_WORKSPACE=${TF_WORKSPACE}
 
       - name: Show Current Workspace
         id: job-step-tf-show-workspace
