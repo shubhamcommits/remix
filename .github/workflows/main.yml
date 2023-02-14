@@ -45,9 +45,6 @@ jobs:
     name: Provision Infrastructure
     runs-on: ubuntu-latest
     needs: [ build-code ]
-    env:
-      ENVIRONMENT: ${{ eq(github.ref, 'refs/heads/master') ? 'production' : 'development' }}
-
     environment: Development
     
     steps:
