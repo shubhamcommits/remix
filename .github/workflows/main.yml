@@ -108,11 +108,19 @@ jobs:
         id: job-step-tf-validate
         run: terraform -chdir=./terraform validate
 
+      - name: Set environment variable based on branch
+        run: |
+          if [ "$GITHUB_REF" = "refs/heads/master" ] || [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            echo "TF_VAR_environment_name=prod" >> $GITHUB_ENV
+          elif [ "$GITHUB_REF" = "refs/heads/development" ]; then
+            echo "TF_VAR_environment_name=dev" >> $GITHUB_ENV
+          fi
+
       - name: Terraform Plan
         id: job-step-tf-plan
         run: terraform -chdir=./terraform plan
         if: github.event_name == 'pull_request' || github.event_name == 'push'
         env:
-          TF_VAR_environment_name: ${{ if startsWith(github.ref, 'refs/heads/master') }}prod${{ else }}dev${{ endif }}
+          TF_VAR_environment_name: ${TF_VAR_environment_name}
           TF_VAR_application_name: recipe-remix
         continue-on-error: true
