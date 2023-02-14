@@ -10,6 +10,11 @@ permissions:
       id-token: write
       contents: read
       pull-requests: write
+env:
+  AWS_ROLE: ${{ secrets.AWS_ROLE }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+  AWS_BUCKET_KEY_NAME: ${{ secrets.AWS_BUCKET_KEY_NAME }}
 
 jobs:
   build-code:
@@ -45,7 +50,6 @@ jobs:
     name: Provision Infrastructure
     runs-on: ubuntu-latest
     needs: [ build-code ]
-    environment: development
     
     steps:
       - name: Configure AWS credentials from AWS account
@@ -91,7 +95,7 @@ jobs:
       - name: Select Existing/Create Terraform Workspace
         id: job-step-tf-init-workspace
         env:
-          TERRAFORM_WORKSPACE: ${{ env.ENVIRONMENT }}
+          TERRAFORM_WORKSPACE: development
         run: |
           if $(terraform -chdir=./terraform workspace list | grep -q "${TERRAFORM_WORKSPACE}") ; 
           then terraform -chdir=./terraform workspace select ${TERRAFORM_WORKSPACE}; 
