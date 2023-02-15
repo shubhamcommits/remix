@@ -13,7 +13,7 @@ resource "aws_elb" "elb" {
   subnets         = aws_subnet.public-subnet.*.id
 
   listener {
-    instance_port     = 3000
+    instance_port     = 80
     instance_protocol = "http"
     lb_port           = 80
     lb_protocol       = "http"
