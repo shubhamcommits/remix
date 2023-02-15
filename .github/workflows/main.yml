@@ -160,7 +160,7 @@ jobs:
       - name: Fetch Instances & Deploy to Instances
         id: job-step-deploy-fetch-instances
         run: |
-          instances=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=dev" --query "Reservations[*].Instances[*].{ID:InstanceId,PublicIP:PublicIpAddress}")
+          instances=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=dev" "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].{ID:InstanceId,PublicIP:PublicIpAddress}")
           echo "${instances}"
           for instance in $(echo $instances | jq -r '.[][] | @base64'); do
             # Extract the instance ID and public IP from the JSON string
