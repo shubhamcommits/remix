@@ -157,13 +157,16 @@ jobs:
         run: |
           ls -la
 
-      - name: Fetch Instances
+      - name: Fetch Instances & Deploy to Instances
         id: job-step-deploy-fetch-instances
         run: |
           instances=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=dev" --query "Reservations[*].Instances[*].{ID:InstanceId,PublicIP:PublicIpAddress}")
           echo "${instances}"
+          for instance in $(echo $instances | jq -r '.[][] | @base64'); do
+            # Extract the instance ID and public IP from the JSON string
+            instance_id=$(echo $instance | base64 --decode | jq -r '.ID')
+            public_ip=$(echo $instance | base64 --decode | jq -r '.PublicIP')
 
-      - name: Output Instances
-        run: |
-          echo "Instances: "
-          echo "${{ steps.job-step-deploy-fetch-instances.outputs.instances }}"
+            # SSH into the instance using its public IP
+            scp -o "StrictHostKeyChecking=no" deploy-app.sh ec2-user@$instance:/home/ec2-user/
+          done
