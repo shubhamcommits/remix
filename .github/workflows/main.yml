@@ -140,7 +140,7 @@ jobs:
 
     steps:
       - name: Configure AWS credentials from AWS account
-        id: job-step-aws-conf
+        id: job-step-deploy-conf
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
           role-to-assume: ${{ secrets.AWS_ROLE }}
@@ -153,7 +153,16 @@ jobs:
           name: build-output
       
       - name: List All Files
-        id: job-step-tf-list-files
+        id: job-step-deploy-list-files
         run: |
           ls -la
-          echo $TF_VAR_environment_name
+
+      - name: Fetch Instances
+        id: job-step-deploy-fetch-instances
+        run: |
+          instances=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=dev" --query "Reservations[*].Instances[*].{ID:InstanceId,PublicIP:PublicIpAddress}")
+          echo "${instances}"
+
+      - name: Output Instances
+        run: |
+          echo "${{ steps.fetch-instances.outputs.instances }}" # output instances for debugging purposes
