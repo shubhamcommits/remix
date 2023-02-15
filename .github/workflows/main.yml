@@ -160,9 +160,10 @@ jobs:
       - name: Fetch Instances
         id: job-step-deploy-fetch-instances
         run: |
-          instances=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=dev" --query "Reservations[*].Instances[*].{ID:InstanceId,PublicIP:PublicIpAddress}")
+          instances=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=dev" --query "Reservations[*].Instances[*].PublicIpAddress" --output text}")
           echo "${instances}"
 
       - name: Output Instances
         run: |
-          echo "${{ steps.job-step-deploy-fetch-instances.outputs.instances }}" # output instances for debugging purposes
+          echo "Instances: "
+          echo "${{ steps.job-step-deploy-fetch-instances.outputs.instances }}"
