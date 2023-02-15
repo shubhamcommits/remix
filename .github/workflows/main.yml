@@ -173,5 +173,5 @@ jobs:
             echo $public_ip
             
             # SSH into the instance using its public IP
-            scp -o "StrictHostKeyChecking=no" deploy-app.sh ec2-user@$instance:/home/ec2-user/
+            scp -o "StrictHostKeyChecking=no" deploy-app.sh ec2-user@$public_ip:/home/ec2-user/
           done
