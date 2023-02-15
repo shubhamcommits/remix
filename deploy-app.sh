@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Set Runtime Variables
 PARAMETER="DEV_RECIPE_REMIX_ENV_VARS"
 REGION="us-east-1"
