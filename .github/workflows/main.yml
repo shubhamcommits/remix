@@ -165,4 +165,4 @@ jobs:
 
       - name: Output Instances
         run: |
-          echo "${{ steps.fetch-instances.outputs.instances }}" # output instances for debugging purposes
+          echo "${{ steps.job-step-deploy-fetch-instances.outputs.instances }}" # output instances for debugging purposes
