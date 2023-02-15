@@ -136,7 +136,7 @@ jobs:
   deploy:
     name: Deploy to EC2 Instances
     runs-on: ubuntu-latest
-    needs: [ build-code ]
+    needs: [ build-code, provision-infra ]
 
     steps:
       - name: Configure AWS credentials from AWS account
