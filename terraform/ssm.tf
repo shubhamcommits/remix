@@ -32,7 +32,7 @@ resource "aws_ssm_document" "ssh_and_run_scripts" {
         inputs = {
           inlineScript = <<-EOF
             #!/bin/bash
-            
+
             # Set Runtime Variables
             PARAMETER="DEV_RECIPE_REMIX_ENV_VARS"
             REGION="us-east-1"
@@ -107,26 +107,32 @@ data "aws_instance" "instances" {
   }
 
   # Only run the command on running instances
-  instance-state-names = ["running"]
+  filter {
+    name   = "instance-state-name"
+    values = ["running"]
+  }
 }
 
 # Attach the Associations With SSM
 resource "aws_ssm_association" "ssh_and_run_scripts" {
-  name = "${local.ssm_document}"
-  targets {
-    key    = "InstanceIds"
-    values = data.aws_instance.instances.ids
-  }
+    count = length(data.aws_instance.instances.ids)
 
-  association_name = "${local.ssm_document}"
+    name = "${local.ssm_document}"
 
-  document_version = "$LATEST"
+    targets {
+        key    = "InstanceIds"
+        values = [data.aws_instance.instances.ids[count.index]]
+    }
 
-  parameters = {
-    workingDirectory = ["/home/ec2-user"]
-  }
+    association_name = "${local.ssm_document}"
 
-  depends_on = [aws_ssm_document.ssh_and_run_scripts]
+    document_version = "$LATEST"
+
+    parameters = {
+        workingDirectory = ["/home/ec2-user"]
+    }
+
+    depends_on = [aws_ssm_document.ssh_and_run_scripts]
 }
 # # Create an aws ssm document for our instances
 # resource "aws_ssm_document" "setup_server" {
