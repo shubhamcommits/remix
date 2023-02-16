@@ -120,3 +120,8 @@ locals {
 locals {
   ssm_document = "${local.environment_name}-${local.application_name}-ssm-document"
 }
+
+# Systems Manager Document
+locals {
+  iam_role_ssm = "${local.environment_name}-${local.application_name}-iam-role-ssm"
+}

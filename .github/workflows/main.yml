@@ -164,14 +164,9 @@ jobs:
           
           echo "${instances}"
 
-          # Convert the output to a Bash array
-          IFS=$'\t' read -r -a public_ips <<< "$instances"
-
           # Iterate over the array of public IP addresses and SSH into each instance
           for public_ip in "${public_ips[@]}"; do
             
             echo $public_ip
             
-            # SSH into the instance using its public IP
-            scp -o "StrictHostKeyChecking=no" deploy-app.sh ec2-user@$public_ip:/home/ec2-user/
           done
