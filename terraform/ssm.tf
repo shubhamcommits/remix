@@ -74,9 +74,7 @@ resource "aws_ssm_association" "ssh_and_run_scripts" {
 
     document_version = "$LATEST"
 
-    parameters = {
-        workingDirectory = "/home/ec2-user"
-    }
+    parameters = {}
 
     depends_on = [aws_ssm_document.ssh_and_run_scripts, local.ssm_document]
 }
