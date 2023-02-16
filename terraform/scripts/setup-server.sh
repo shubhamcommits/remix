@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set Runtime Variables
-# APPS_DIR="/home/ec2-user/apps"
+APPS_DIR="/home/ec2-user/apps"
 
 # Update Packages
 sudo yum update -y
@@ -28,14 +28,14 @@ sudo yum install yarn -y
 # Install pm2
 sudo npm install -g pm2
 
-# # Create Directory
-# mkdir -p $APPS_DIR
+# Create Directory
+mkdir -p $APPS_DIR
 
-# # Change Directory
-# cd $APPS_DIR
+# Change Directory
+cd $APPS_DIR
 
-# # Setup Repository
-# git clone https://github.com/shubhamcommits/remix.git
+# Setup Repository
+git clone https://github.com/shubhamcommits/remix.git
 
 # # Change Directory
 # cd $APPS_DIR/remix
