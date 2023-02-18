@@ -2,17 +2,17 @@
 resource "aws_internet_gateway" "igw" {
   depends_on = [
     aws_vpc.main,
-    var.owner_name,
-    var.environment_name,
-    var.internet_gateway_name
+    local.owner_name,
+    local.environment_name,
+    local.internet_gateway_name
   ]
 
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name        = var.internet_gateway_name
-    Environment = var.environment_name
-    Owner       = var.owner_name
+    Name        = local.internet_gateway_name
+    Environment = local.environment_name
+    Owner       = local.owner_name
   }
 }
 
@@ -34,7 +34,7 @@ resource "aws_route_table_association" "public_subnets_association" {
 resource "aws_route" "public_subnets_igw" {
   depends_on = [
     aws_vpc.main,
-    var.public_internet_cidr,
+    local.public_internet_cidr,
     aws_internet_gateway.igw,
     data.aws_availability_zones.all
   ]
@@ -42,6 +42,6 @@ resource "aws_route" "public_subnets_igw" {
   count = length(data.aws_availability_zones.all.names)
 
   route_table_id         = aws_vpc.main.default_route_table_id
-  destination_cidr_block = var.public_internet_cidr
+  destination_cidr_block = local.public_internet_cidr
   gateway_id             = aws_internet_gateway.igw.id
 }

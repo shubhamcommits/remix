@@ -12,8 +12,10 @@ sudo yum install git -y
 # Install nginx
 sudo amazon-linux-extras install nginx1.12
 
-# Start and enable nginx
+# Start nginx
 sudo systemctl start nginx
+
+# Enable nginx
 sudo systemctl enable nginx
 
 # Setup Node.js
@@ -41,8 +43,8 @@ cd $APPS_DIR/remix
 # Add the necessary permissions to the script
 chmod u+x ./deploy-app.sh
 
-# Redeploy the application - PM2
-./deploy-app.sh > $APPS_DIR/remix/deploy-app.log
+# # Redeploy the application - PM2
+# ./deploy-app.sh > $APPS_DIR/remix/deploy-app.log
 
 # Return the Status
 exit 1

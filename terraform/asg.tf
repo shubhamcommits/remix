@@ -3,11 +3,11 @@ resource "aws_autoscaling_group" "asg" {
   depends_on = [
     aws_launch_configuration.alc,
     data.aws_availability_zones.all,
-    var.ec2_instance_name,
-    var.autoscaling_group_name,
+    local.ec2_instance_name,
+    local.autoscaling_group_name,
     aws_subnet.public-subnet
   ]
-  name                      = var.autoscaling_group_name
+  name                      = local.autoscaling_group_name
   launch_configuration      = aws_launch_configuration.alc.name
   vpc_zone_identifier       = aws_subnet.public-subnet.*.id
   max_size                  = 10
@@ -22,7 +22,19 @@ resource "aws_autoscaling_group" "asg" {
 
   tag {
     key                 = "Name"
-    value               = var.ec2_instance_name
+    value               = local.ec2_instance_name
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Environment"
+    value               = local.environment_name
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Owner"
+    value               = local.owner_name
     propagate_at_launch = true
   }
 

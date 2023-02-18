@@ -20,7 +20,7 @@ export const UserRoutes = Router()
 UserRoutes.route('/')
 
     // GET - Fetch all Users
-    .get(isloggedInToAuth0, requiresAuth(), userControllers.fetchAllUsers)
+    .get(userControllers.fetchAllUsers)
 
     // POST - Create User Route Definition
-    .post(isloggedInToAuth0, requiresAuth(), userControllers.createUser)
+    .post(userControllers.createUser)

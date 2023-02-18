@@ -1,9 +1,32 @@
+#!/bin/bash
+
 # Set Runtime Variables
-PARAMETER="PROD_RECIPE_REMIX_ENV_VARS"
+PARAMETER="DEV_RECIPE_REMIX_ENV_VARS"
 REGION="us-east-1"
 APPS_DIR="/home/ec2-user/apps"
 
-# Change Directory
+# Check if directory exist
+if [ ! -d $APPS_DIR ]; then
+
+    # Print Outputs
+    echo "Base Directory does not exist"
+    echo "Executing commands for directory creation ..."
+
+    # Change Directory
+    cd $APPS_DIR
+
+    # Clone the Directory
+    git clone https://github.com/shubhamcommits/remix.git
+
+else
+
+    # Print Outputs
+    echo "Base Directory already exists"
+    echo "Continuing ..."
+
+fi
+
+# Change the Directory
 cd $APPS_DIR/remix
 
 # Get parameters and put it into .env file inside application root
@@ -19,16 +42,16 @@ npm install
 npm run build
 
 # Kill all the running application
-/bin/pm2 kill
+pm2 kill
 
 # List down the applications and initiate the deamon
-/bin/pm2 ls
+pm2 ls
 
 # Setup the application
-/bin/pm2 start "npm run dev" --name "remix-recipe-server"
+pm2 start "npm run dev" --name "remix-recipe-server"
 
 # Init the application on server Startup
-/bin/pm2 startup systemd
+pm2 startup systemd
 
 # Save the configuration on server
-/bin/pm2 save
+pm2 save
