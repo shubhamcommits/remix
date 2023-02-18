@@ -161,10 +161,3 @@ jobs:
         run: |
           INSTANCE_IDS=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=dev" "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].InstanceId" --output text)
           echo "INSTANCE_IDS=${INSTANCE_IDS}" >> $GITHUB_ENV
-
-      - name: Execute Queries on EC2 Instance
-        uses: aws-actions/aws-session-manager-plugin@v1
-        with:
-          document: AWS-RunShellScript
-          instance-id: ${{ matrix.instance-id }}
-          parameters: '{ "commands": ["./deploy-app.sh"] }'

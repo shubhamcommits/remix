@@ -113,7 +113,7 @@ locals {
 
 # ALC Name
 locals {
-  launch_configuration_name = "${local.environment_name}-${local.application_name}-launch-configuration-"
+  launch_configuration_name = "${local.environment_name}-${local.application_name}-launch-configuration"
 }
 
 # Systems Manager Document
