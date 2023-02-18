@@ -160,4 +160,4 @@ jobs:
         id: job-step-deploy-fetch-instances
         run: |
           INSTANCE_IDS=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=dev" "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].InstanceId" --output text)
-          echo "INSTANCE_IDS=${INSTANCE_IDS}" >> $GITHUB_ENV
+          echo "${INSTANCE_IDS}"
