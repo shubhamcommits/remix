@@ -17,46 +17,46 @@ const remixControllers = new RemixController()
 export const RemixRoutes = Router()
 
 // Route Definition
-RemixRoutes.post('/generate',isloggedInToAuth0, requiresAuth(), remixControllers.remixRecipe)
+RemixRoutes.post('/generate',remixControllers.remixRecipe)
 
 // Route Definition
 RemixRoutes.route('/types')
 
     // Fetch all Remix Types
-    .get(isloggedInToAuth0, requiresAuth(), remixControllers.fetchAllRemixTypes)
+    .get(remixControllers.fetchAllRemixTypes)
 
     // Create new Remix Type
-    .post(isloggedInToAuth0, requiresAuth(), remixControllers.createRemixType)
+    .post(remixControllers.createRemixType)
 
 // Route Definition
 RemixRoutes.route('/types/:id')
 
     // Fetch Remix Type by ID
-    .get(isloggedInToAuth0, requiresAuth(), remixControllers.fetchRemixType)
+    .get(remixControllers.fetchRemixType)
 
     // Update Remix Type by ID
-    .put(isloggedInToAuth0, requiresAuth(), remixControllers.updateRemixType)
+    .put(remixControllers.updateRemixType)
 
     // Delete Remix Type by ID
-    .delete(isloggedInToAuth0, requiresAuth(), remixControllers.removeRemixType)
+    .delete(remixControllers.removeRemixType)
 
 // Route Definition
 RemixRoutes.route('/')
 
     // Fetch all Remixed Recipes
-    .get(isloggedInToAuth0, requiresAuth(), remixControllers.fetchAllRemixedRecipes)
+    .get(remixControllers.fetchAllRemixedRecipes)
 
     // Create new Remixed Recipe
-    .post(isloggedInToAuth0, requiresAuth(), remixControllers.createRemixedRecipe)
+    .post(remixControllers.createRemixedRecipe)
 
 // Route Definition
 RemixRoutes.route('/:id')
 
     // Fetch Remixed Recipe by ID
-    .get(isloggedInToAuth0, requiresAuth(), remixControllers.fetchRemixedRecipe)
+    .get(remixControllers.fetchRemixedRecipe)
 
     // Update Remixed Recipe by ID
-    .put(isloggedInToAuth0, requiresAuth(), remixControllers.updateRemixedRecipe)
+    .put(remixControllers.updateRemixedRecipe)
 
     // Delete Remixed Recipe by ID
-    .delete(isloggedInToAuth0, requiresAuth(), remixControllers.removeRemixedRecipe)
+    .delete(remixControllers.removeRemixedRecipe)

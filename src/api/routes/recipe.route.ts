@@ -17,25 +17,25 @@ const recipeControllers = new RecipeController()
 export const RecipeRoutes = Router()
 
 // POST - Extract Recipe Details
-RecipeRoutes.post('/extract', isloggedInToAuth0, requiresAuth(), recipeControllers.extractRawRecipe)
+RecipeRoutes.post('/extract', recipeControllers.extractRawRecipe)
 
 // POST - Parse Recipe
-RecipeRoutes.post('/parse', isloggedInToAuth0, requiresAuth(), recipeControllers.parseRecipe)
+RecipeRoutes.post('/parse', recipeControllers.parseRecipe)
 
 // Route Definition
 RecipeRoutes.route('/')
 
     // Fetch all Recipes
-    .get(isloggedInToAuth0, requiresAuth(), recipeControllers.fetchAllRecipes)
+    .get(recipeControllers.fetchAllRecipes)
 
     // Create new Recipe
-    .post(isloggedInToAuth0, requiresAuth(), recipeControllers.createRecipe)
+    .post(recipeControllers.createRecipe)
 
 // Route Definition
 RecipeRoutes.route('/:id')
 
     // Fetch the Recipe by ID 
-    .get(isloggedInToAuth0, requiresAuth(), recipeControllers.fetchRecipe)
+    .get(recipeControllers.fetchRecipe)
 
     // Remove the Recipe
-    .delete(isloggedInToAuth0, requiresAuth(), recipeControllers.removeRecipe)
+    .delete(recipeControllers.removeRecipe)
