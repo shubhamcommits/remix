@@ -5,7 +5,6 @@ on:
     branches:
       - development
       - main
-  pull_request:
 permissions:
       id-token: write
       contents: read
@@ -119,7 +118,7 @@ jobs:
       - name: Terraform Plan
         id: job-step-tf-plan
         run: terraform -chdir=./terraform plan
-        if: github.event_name == 'pull_request' || github.event_name == 'push'
+        if: github.event_name == 'push'
         env:
           TF_VAR_environment_name: ${{ env.TF_VAR_environment_name }}
           TF_VAR_application_name: recipe-remix
@@ -160,13 +159,12 @@ jobs:
       - name: Fetch Instances & Deploy to Instances
         id: job-step-deploy-fetch-instances
         run: |
-          instances=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=dev" "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
-          
-          echo "${instances}"
+          INSTANCE_IDS=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=dev" "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].InstanceId" --output text)
+          echo "INSTANCE_IDS=${INSTANCE_IDS}" >> $GITHUB_ENV
 
-          # Iterate over the array of public IP addresses and SSH into each instance
-          for public_ip in "${public_ips[@]}"; do
-            
-            echo $public_ip
-            
-          done
+      - name: Execute Queries on EC2 Instance
+        uses: aws-actions/aws-session-manager-plugin@v1
+        with:
+          document: AWS-RunShellScript
+          instance-id: ${{ matrix.instance-id }}
+          parameters: '{ "commands": ["./deploy-app.sh"] }'

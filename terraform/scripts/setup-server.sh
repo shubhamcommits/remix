@@ -37,11 +37,11 @@ cd $APPS_DIR
 # Setup Repository
 git clone https://github.com/shubhamcommits/remix.git
 
-# # Change Directory
-# cd $APPS_DIR/remix
+# Change Directory
+cd $APPS_DIR/remix
 
-# # Add the necessary permissions to the script
-# chmod u+x ./deploy-app.sh
+# Add the necessary permissions to the script
+chmod u+x ./deploy-app.sh
 
 # # Redeploy the application - PM2
 # ./deploy-app.sh > $APPS_DIR/remix/deploy-app.log
