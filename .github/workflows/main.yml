@@ -134,6 +134,27 @@ jobs:
           TF_VAR_application_name: recipe-remix
         run: terraform -chdir=./terraform apply -auto-approve -input=false
 
+      - name: Download Build Output
+        uses: actions/download-artifact@v3
+        with:
+          name: build-output
+
+      - name: Prepare Environment Files
+        id: job-step-prep-env
+        env:
+          TF_VAR_environment_name: ${{ env.TF_VAR_environment_name }}
+          TF_VAR_application_name: recipe-remix
+        run: |
+          aws --region ${AWS_REGION} ssm get-parameter --name ${TF_VAR_environment_name}-${TF_VAR_application_name}-env-vars  --with-decryption --output text --query Parameter.Value > .env
+          ls -la
+
+      - name: Store build output
+        id: job-step-store-build-output
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-output
+          path: .
+
   deploy:
     name: Deploy to EC2 Instances
     runs-on: ubuntu-latest
@@ -174,7 +195,7 @@ jobs:
           for INSTANCE_ID in ${INSTANCE_IDS}; do
             unbuffer aws ssm start-session \
             --document-name 'AWS-StartNonInteractiveCommand' \
-            --parameters '{"command": ["sudo aws s3 cp s3://dev-recipe-remix-artifacts/ /home/ec2-user/apps/remix --recursive --region us-east-1"]}' \
+            --parameters '{"command": ["pm2 kill","sudo aws s3 cp s3://dev-recipe-remix-artifacts/ /home/ec2-user/apps/remix --recursive --region us-east-1"]}' \
             --target "${INSTANCE_ID}"
             echo "Instance ID: ${INSTANCE_ID}"
           done
