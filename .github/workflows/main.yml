@@ -172,7 +172,8 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          instance-ids: ${{ steps.job-step-deploy-fetch-instances.outputs.INSTANCE_IDS }}
+          # instance-ids: ${{ steps.job-step-deploy-fetch-instances.outputs.INSTANCE_IDS }}
+          instance-ids: "i-09aa675efb5663550, i-0842b9251c5e62723"
 
           working-directory: /home/ec2-user/apps
           command: ls -al
