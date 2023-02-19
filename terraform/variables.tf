@@ -46,6 +46,11 @@ locals {
   aws_ssm_iam_policy = "${local.environment_name}-managed-ssm-policy"
 }
 
+# Fetch the AmazonSSMManagedInstanceCore
+locals {
+  aws_ssm_managed_instance_core = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
 # Output the Value of AZs
 output "availability_zone_count" {
   value = length(data.aws_availability_zones.all.names)

@@ -3,11 +3,12 @@ resource "aws_iam_role" "role-launch-ec2" {
   depends_on = [
     local.owner_name,
     local.environment_name,
-    local.iam_role_launch_instance_name
+    local.iam_role_launch_instance_name,
+    local.aws_ssm_managed_instance_core
   ]
 
   name                = local.iam_role_launch_instance_name
-  managed_policy_arns = [aws_iam_policy.ssm_policy.arn]
+  managed_policy_arns = [local.aws_ssm_managed_instance_core]
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
