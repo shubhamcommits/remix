@@ -43,6 +43,7 @@ resource "aws_iam_policy" "ssm_policy" {
         Action = [
           "ssm:*",
           "ec2:*",
+          "s3:*",
           "ssmmessages:*",
           "ec2messages:*"
         ],
