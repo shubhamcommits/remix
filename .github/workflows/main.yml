@@ -199,4 +199,10 @@ jobs:
             --parameters '{"command": ["sudo chmod u+x /home/ec2-user/apps/remix/deploy-app.sh"]}' \
             --target "${INSTANCE_ID}"
             echo "Instance ID: ${INSTANCE_ID}"
+
+            unbuffer aws ssm start-session \
+            --document-name 'AWS-StartNonInteractiveCommand' \
+            --parameters '{"command": ["sudo /home/ec2-user/apps/remix/deploy-app.sh"]}' \
+            --target "${INSTANCE_ID}"
+            echo "Instance ID: ${INSTANCE_ID}"
           done
