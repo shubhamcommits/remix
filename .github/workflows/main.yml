@@ -157,6 +157,7 @@ jobs:
         id: job-step-deploy-list-files
         run: |
           ls -la
+          aws s3 cp s3://dev-recipe-remix-artifacts/ --recursive
 
       - name: Fetch Instances & Deploy to Instances
         id: job-step-deploy-fetch-instances
