@@ -4,11 +4,13 @@ resource "aws_iam_role" "role-launch-ec2" {
     local.owner_name,
     local.environment_name,
     local.iam_role_launch_instance_name,
-    local.aws_ssm_managed_instance_core
+    local.aws_ssm_managed_instance_core,
+    local.aws_ssm_managed_full_access,
+    local.aws_ssm_managed_ec2_role
   ]
 
   name                = local.iam_role_launch_instance_name
-  managed_policy_arns = [local.aws_ssm_managed_instance_core]
+  managed_policy_arns = [aws_iam_policy.ssm_policy.arn, local.aws_ssm_managed_ec2_role, local.aws_ssm_managed_full_access, local.aws_ssm_managed_instance_core]
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
