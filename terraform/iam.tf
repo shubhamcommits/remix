@@ -38,17 +38,10 @@ resource "aws_iam_policy" "ssm_policy" {
         Sid    = "VisualEditor0",
         Effect = "Allow",
         Action = [
-          "ssm:PutParameter",
-          "ssm:LabelParameterVersion",
-          "ssm:DeleteParameter",
-          "ssm:UnlabelParameterVersion",
-          "ssm:DescribeParameters",
-          "ssm:GetParameterHistory",
-          "ssm:GetParametersByPath",
-          "ssm:GetParameters",
-          "ssm:GetParameter",
-          "ssm:DeleteParameters",
-          "ssm:ListTagsForResource"
+          "ssm:*",
+          "ec2:*",
+          "ssmmessages:*",
+          "ec2messages:*"
         ],
         Resource = "*"
       }
