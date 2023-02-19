@@ -159,7 +159,7 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
           ls -la
-          aws s3 cp s3://dev-recipe-remix-artifacts/ . --recursive --region ${AWS_REGION}
+          aws s3 cp . s3://dev-recipe-remix-artifacts/ --recursive --region ${AWS_REGION}
 
       - name: Fetch Instances & Deploy to Instances
         id: job-step-deploy-fetch-instances
