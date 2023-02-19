@@ -137,7 +137,27 @@ locals {
   ssm_document = "${local.environment_name}-${local.application_name}-ssm-document"
 }
 
-# Systems Manager Document
+# Secrets Manager for RDS
 locals {
-  iam_role_ssm = "${local.environment_name}-${local.application_name}-iam-role-ssm"
+  rds_secret_name = "${local.environment_name}-${local.application_name}-rds-secret"
+}
+
+# Database Subnet Group
+locals {
+  db_subnet_group_name = "${local.environment_name}-${local.application_name}-db-subnet-group"
+}
+
+# Database Cluster Identifier
+locals {
+  db_cluster_name = "${local.environment_name}-${local.application_name}-db-cluster"
+}
+
+# Database Instance Identifier
+locals {
+  db_instance_name = "${local.environment_name}-${local.application_name}-db-instance"
+}
+
+# EC2 Default DB Instance Type
+locals {
+  db_instance_type = "db.t3.small"
 }
