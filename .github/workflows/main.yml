@@ -208,18 +208,18 @@ jobs:
           for INSTANCE_ID in ${INSTANCE_IDS}; do
             unbuffer aws ssm start-session \
             --document-name 'AWS-StartNonInteractiveCommand' \
-            --parameters '{"command": ["sudo aws s3 cp s3://${ENVIRONMENT}-${APP_NAME}-artifacts/ ${DIR_NAME} --recursive --region ${AWS_REGION}"]}' \
+            --parameters '{"command": ["sudo aws s3 cp s3://'${ENVIRONMENT}'-'${APP_NAME}'-artifacts/ '${DIR_NAME}' --recursive --region '${AWS_REGION}'"]}' \
             --target "${INSTANCE_ID}"
 
             unbuffer aws ssm start-session \
             --document-name 'AWS-StartNonInteractiveCommand' \
-            --parameters '{"command": ["sudo chmod u+x ${DIR_NAME}/deploy-app.sh"]}' \
+            --parameters '{"command": ["sudo chmod u+x '${DIR_NAME}'/deploy-app.sh"]}' \
             --target "${INSTANCE_ID}"
-            echo "Instance ID: ${INSTANCE_ID}"
 
             unbuffer aws ssm start-session \
             --document-name 'AWS-StartNonInteractiveCommand' \
-            --parameters '{"command": ["sudo ${DIR_NAME}/deploy-app.sh"]}' \
+            --parameters '{"command": ["sudo '${DIR_NAME}'/deploy-app.sh"]}' \
             --target "${INSTANCE_ID}"
+            
             echo "Instance ID: ${INSTANCE_ID}"
           done
