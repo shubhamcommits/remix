@@ -166,7 +166,7 @@ jobs:
           echo "Instances: ${INSTANCE_IDS}"
 
           for INSTANCE_ID in ${INSTANCE_IDS}; do
-            aws ssm start-session \
+            unbuffer aws ssm start-session \
             --document-name 'AWS-StartNonInteractiveCommand' \
             --parameters '{"command": ["sudo yum -y update amazon-ssm-agent"]}' \
             --target "${INSTANCE_ID}"
