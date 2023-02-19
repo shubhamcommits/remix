@@ -163,7 +163,7 @@ jobs:
         run: |
           INSTANCE_IDS=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=dev" "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].InstanceId" --output text)
           echo "${INSTANCE_IDS}"
-          echo "INSTANCE_IDS=${echo $INSTANCE_IDS | sed 's/\[//g' | sed 's/\]//g' | sed 's/ //g'}" >> $GITHUB_OUTPUT
+          echo "INSTANCE_IDS=${INSTANCE_IDS}" >> $GITHUB_OUTPUT
 
       - name: AWS SSM Send-Command
         uses: peterkimzz/aws-ssm-send-command@master
@@ -172,7 +172,8 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          instance-ids: ${{ steps.job-step-deploy-fetch-instances.outputs.INSTANCE_IDS }}
+          instance-ids: | 
+            ${{ steps.job-step-deploy-fetch-instances.outputs.INSTANCE_IDS }}
 
           working-directory: /home/ec2-user/apps
           command: ls -al
