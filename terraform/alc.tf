@@ -6,7 +6,7 @@ resource "aws_launch_configuration" "alc" {
     local.launch_configuration_name,
     aws_security_group.sg
   ]
-  name            = local.launch_configuration_name
+  name_prefix     = "${local.launch_configuration_name}-"
   image_id        = local.ec2_default_ami
   instance_type   = local.ec2_instance_type
   security_groups = [aws_security_group.sg.id]
