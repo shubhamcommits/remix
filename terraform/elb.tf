@@ -19,6 +19,15 @@ resource "aws_elb" "elb" {
     lb_protocol       = "http"
   }
 
+  listener {
+    instance_port       = 80
+    instance_protocol   = "http"
+    lb_port             = 443
+    lb_protocol         = "https"
+    ssl_certificate_id  = "arn:aws:acm:us-east-1:619568494776:certificate/2417c179-3624-438c-8779-7113264bfd76"
+    ssl_policy          = "ELBSecurityPolicy-2016-08"
+  }
+
   health_check {
     target              = "HTTP:80/"
     interval            = 30
