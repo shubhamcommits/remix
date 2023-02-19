@@ -161,7 +161,7 @@ jobs:
       - name: Fetch Instances & Deploy to Instances
         id: job-step-deploy-fetch-instances
         run: |
-          INSTANCE_IDS=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=dev" "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].InstanceId" --output text | awk '{ printf "\"%s\", ", $1 } END { printf "\n" }' | sed 's/, $//')
+          INSTANCE_IDS=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=dev" "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].InstanceId" --output text | awk '{ printf "%s, ", $1 } END { printf "\n" }' | sed 's/, $//')
           echo "${INSTANCE_IDS}"
           echo "INSTANCE_IDS=${INSTANCE_IDS}" >> $GITHUB_OUTPUT
 
