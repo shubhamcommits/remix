@@ -194,7 +194,7 @@ jobs:
         id: job-step-deploy-fetch-instances
         env:
           AWS_REGION: ${{ secrets.AWS_REGION }}
-          ENVIRONMENT: ${{ env.TF_VAR_environment_name }}
+          ENVIRONMENT: ${{ env.ENVIRONMENT }}
           APP_NAME: ${{ env.APP_NAME }}
           DIR_NAME: ${{ env.DIR_NAME }}
         run: |
@@ -208,7 +208,7 @@ jobs:
           for INSTANCE_ID in ${INSTANCE_IDS}; do
             unbuffer aws ssm start-session \
             --document-name 'AWS-StartNonInteractiveCommand' \
-            --parameters '{"command": ["sudo aws s3 cp s3://${ENVIRONMENT}-${APP_NAME}-artifacts/ ${DIR_NAME} --recursive --region us-east-1"]}' \
+            --parameters '{"command": ["sudo aws s3 cp s3://${ENVIRONMENT}-${APP_NAME}-artifacts/ ${DIR_NAME} --recursive --region ${AWS_REGION}"]}' \
             --target "${INSTANCE_ID}"
 
             unbuffer aws ssm start-session \
