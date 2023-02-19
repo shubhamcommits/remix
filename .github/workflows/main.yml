@@ -161,6 +161,9 @@ jobs:
       - name: Fetch Instances & Deploy to Instances
         id: job-step-deploy-fetch-instances
         run: |
+          
+          sudo apt-get install expect -y
+
           INSTANCE_IDS=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=dev" "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].InstanceId" --output text)
           
           echo "Instances: ${INSTANCE_IDS}"
