@@ -191,7 +191,14 @@ jobs:
           for INSTANCE_ID in ${INSTANCE_IDS}; do
             unbuffer aws ssm start-session \
             --document-name 'AWS-StartNonInteractiveCommand' \
-            --parameters '{"command": ["pm2 kill; sudo aws s3 cp s3://dev-recipe-remix-artifacts/ /home/ec2-user/apps/remix --recursive --region us-east-1"]}' \
+            --parameters '{"command": ["sudo aws s3 cp s3://dev-recipe-remix-artifacts/ /home/ec2-user/apps/remix --recursive --region us-east-1"]}' \
             --target "${INSTANCE_ID}"
+            --extra-parameters "sessionType=Standard,runAs=ec2-user"
+
+            unbuffer aws ssm start-session \
+            --document-name 'AWS-StartNonInteractiveCommand' \
+            --parameters '{"command": ["sudo chmod u+x /home/ec2-user/apps/remix/deploy-app.sh"]}' \
+            --target "${INSTANCE_ID}"
+            --extra-parameters "sessionType=Standard,runAs=ec2-user"
             echo "Instance ID: ${INSTANCE_ID}"
           done
