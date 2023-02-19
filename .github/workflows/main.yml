@@ -10,8 +10,12 @@ permissions:
       contents: read
       pull-requests: write
 env:
+  APP_NAME: "recipe-remix"
+  DIR_NAME: "/home/ec2-user/apps/remix"
   AWS_ROLE: ${{ secrets.AWS_ROLE }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
   AWS_BUCKET_KEY_NAME: ${{ secrets.AWS_BUCKET_KEY_NAME }}
 
@@ -121,7 +125,7 @@ jobs:
         if: github.event_name == 'push'
         env:
           TF_VAR_environment_name: ${{ env.TF_VAR_environment_name }}
-          TF_VAR_application_name: recipe-remix
+          TF_VAR_application_name: ${{ env.APP_NAME }}
         continue-on-error: true
 
       - name: Terraform Apply
@@ -129,8 +133,25 @@ jobs:
         if: github.event_name == 'push'
         env:
           TF_VAR_environment_name: ${{ env.TF_VAR_environment_name }}
-          TF_VAR_application_name: recipe-remix
+          TF_VAR_application_name: ${{ env.APP_NAME }}
         run: terraform -chdir=./terraform apply -auto-approve -input=false
+
+      - name: Prepare Environment Files
+        id: job-step-prep-env
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          TF_VAR_environment_name: ${{ env.TF_VAR_environment_name }}
+          TF_VAR_application_name: ${{ env.APP_NAME }}
+        run: |
+          aws --region ${AWS_REGION} ssm get-parameter --name ${TF_VAR_environment_name}-${TF_VAR_application_name}-env-vars  --with-decryption --output text --query Parameter.Value > .env
+          ls -la
+
+      - name: Store build output
+        id: job-step-store-build-output
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-output
+          path: .
 
   deploy:
     name: Deploy to EC2 Instances
@@ -146,6 +167,14 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           role-session-name: GitHub-OIDC-TERRAFORM
 
+      - name: Set environment variables based on branch
+        run: |
+          if [ "$GITHUB_REF" = "refs/heads/master" ] || [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            echo "ENVIRONMENT=prod" >> $GITHUB_ENV
+          elif [ "$GITHUB_REF" = "refs/heads/development" ]; then
+            echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+          fi
+
       - name: Download Build Output
         uses: actions/download-artifact@v3
         with:
@@ -153,11 +182,44 @@ jobs:
       
       - name: List All Files
         id: job-step-deploy-list-files
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          ENVIRONMENT: ${{ env.ENVIRONMENT }}
+          APP_NAME: ${{ env.APP_NAME }}
         run: |
           ls -la
+          aws s3 cp . s3://${ENVIRONMENT}-${APP_NAME}-artifacts/ --recursive --region ${AWS_REGION}
 
       - name: Fetch Instances & Deploy to Instances
         id: job-step-deploy-fetch-instances
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          ENVIRONMENT: ${{ env.ENVIRONMENT }}
+          APP_NAME: ${{ env.APP_NAME }}
+          DIR_NAME: ${{ env.DIR_NAME }}
         run: |
-          INSTANCE_IDS=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=dev" "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].InstanceId" --output text)
-          echo "${INSTANCE_IDS}"
+          
+          sudo apt-get install expect -y
+
+          INSTANCE_IDS=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=${ENVIRONMENT}" "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].InstanceId" --output text)
+          
+          echo "Instances: ${INSTANCE_IDS}"
+
+          for INSTANCE_ID in ${INSTANCE_IDS}; do
+            unbuffer aws ssm start-session \
+            --document-name 'AWS-StartNonInteractiveCommand' \
+            --parameters '{"command": ["sudo aws s3 cp s3://'${ENVIRONMENT}'-'${APP_NAME}'-artifacts/ '${DIR_NAME}' --recursive --region '${AWS_REGION}'"]}' \
+            --target "${INSTANCE_ID}"
+
+            unbuffer aws ssm start-session \
+            --document-name 'AWS-StartNonInteractiveCommand' \
+            --parameters '{"command": ["sudo chmod u+x '${DIR_NAME}'/deploy-app.sh"]}' \
+            --target "${INSTANCE_ID}"
+
+            unbuffer aws ssm start-session \
+            --document-name 'AWS-StartNonInteractiveCommand' \
+            --parameters '{"command": ["sudo '${DIR_NAME}'/deploy-app.sh"]}' \
+            --target "${INSTANCE_ID}"
+            
+            echo "Instance ID: ${INSTANCE_ID}"
+          done

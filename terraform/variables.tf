@@ -43,8 +43,24 @@ data "aws_availability_zones" "all" {}
 
 # Fetch the SSM Policy
 locals {
-  aws_ssm_iam_policy = "${local.environment_name}-ssm-parameter-store"
+  aws_ssm_iam_policy = "${local.environment_name}-managed-ssm-policy"
 }
+
+# Fetch the AmazonSSMManagedInstanceCore Policy
+locals {
+  aws_ssm_managed_instance_core = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+# Fetch the AmazonSSMFullAccess
+locals {
+  aws_ssm_managed_full_access = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
+}
+
+# Fetch the AmazonEC2RoleforSSM
+locals {
+  aws_ssm_managed_ec2_role = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+}
+
 
 # Output the Value of AZs
 output "availability_zone_count" {
