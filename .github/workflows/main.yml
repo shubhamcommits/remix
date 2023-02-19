@@ -174,7 +174,7 @@ jobs:
           for INSTANCE_ID in ${INSTANCE_IDS}; do
             unbuffer aws ssm start-session \
             --document-name 'AWS-StartNonInteractiveCommand' \
-            --parameters '{"command": ["aws s3 cp s3://dev-recipe-remix-artifacts/ /home/ec2-user/apps/remix --recursive --region ${AWS_REGION}"]}' \
+            --parameters '{"command": ["aws s3 cp s3://dev-recipe-remix-artifacts/ /home/ec2-user/apps/remix --recursive --region us-east-1"]}' \
             --target "${INSTANCE_ID}"
             echo "Instance ID: ${INSTANCE_ID}"
           done
