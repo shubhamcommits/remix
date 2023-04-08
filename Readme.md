@@ -3,6 +3,80 @@
 
 ##  
 
+## Overview:
+
+This project aims to create a Node.js API written in TypeScript to serve a mobile application that allows users to “remix” any recipe. The API will scrape the website provided by the user and save the scraped recipe to a database, associating it with the user. Users can choose from several different “remix” options, such as making the recipe gluten-free, dairy-free, vegan, vegetarian, keto, or paleo. These options will utilize the OpenAI API to request that the recipe be remixed for the given command. Users can login with federated login using Auth0 as the auth provider. The API will be hosted on AWS and will utilize RDS with Aurora.
+
+## Functionality:
+
+1.  Recipe Scraping: The API will scrape the website provided by the user and save the scraped recipe to a database, associating it with the user. The scraping component will be provided. The recipe will have two parts: ingredients and instructions.
+    
+2.  Recipe Remixing: Once the app has scraped and saved the recipe, the user can choose from several different “remix” options. Those options include:
+    
+- Make it Gluten Free (Please take the following recipe and make it gluten-free. [insert recipe here])
+- Make it Dairy Free (Please take the following recipe and make it dairy-free. [insert recipe here])
+- Make it Vegan (Please take the following recipe and make it Vegan. [insert recipe here])
+- Make it Vegetarian (Please take the following recipe and make it Vegetarian. [insert recipe here])
+- Make it Keto (Please take the following recipe and make it Keto. [insert recipe here])
+- Make it Paleo (Please take the following recipe and make it Paleo. [insert recipe here])
+
+These options will utilize OpenAI API and prompt the API with the ingredients and instructions to request that the recipe be remixed for the given command. OpenAI API will return a “remixed” version that the user selected and it will be saved as a version of the recipe as remixed by the user. Users can select versions of the recipe to view in case they want to jump back to a different version.
+
+3.  Authentication: Users can login with a federated login such as Twitter, Apple, etc. using Auth0 as the auth provider.
+    
+
+## API Sepcification:
+
+1.  `GET /recipes/feed`:
+
+- Retrieves all the recipes for all users in a "feed" format.
+- Returns details about a recipe such as title, original author, remix author, like count, image, and recipe ID.
+
+2.  `POST /recipes/:id/like`:
+
+- Allows a user to "like" or "unlike" a recipe.
+- Requires authentication.
+
+3.  `GET /recipes/me`:
+
+- Retrieves all recipes for the current user.
+- Returns details about a recipe such as title, original author, like count, image, and recipe ID.
+- Requires authentication.
+
+4.  `GET /recipes/:id`:
+
+- Retrieves a specific recipe and its details.
+- Returns details about a recipe such as title, author, like count, image, recipe ID, ingredients list, instructions list, original author, history list (vegan version, dairy free version, etc.).
+
+5.  `POST /recipes/parse`:
+
+- Takes in a URL and uses the scraping code to scrape the recipe into its two parts and save it to the database.
+- Returns a success status if the recipe is scraped and saved successfully.
+
+6.  `POST /recipes/:id/remix`:
+
+-   Allows the user to remix a recipe.
+-   Takes in the id of the recipe and the remix type (make it vegan, make it dairy free, etc.) and uses the OpenAI API to request that the recipe be remixed for the given command.
+- Saves the remixed recipe to the database and returns a success status.
+
+Authentication:
+
+- All endpoints requiring authentication will use Auth0 for federated login.
+
+Data Model:
+
+https://dbdiagram.io/d/63cd5d26296d97641d7b4b84
+
+5.  Hosting: The API will be hosted on AWS and will utilize RDS with Aurora.
+
+## Technologies:
+
+- Node.js
+- TypeScript
+- OpenAI API
+- Auth0
+- AWS
+- RDS with Aurora
 
 ####  Make sure to read all the guidelines before start working
 
